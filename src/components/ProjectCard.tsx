@@ -25,7 +25,14 @@ export function ProjectCard({ project }: { project: Project }) {
       <div className="flex flex-1 flex-col gap-3 px-5 py-4">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wide text-steel">{project.zone}</span>
-          {isCreator ? <CreatorBadge /> : isOfficial ? <Badge orgType={project.orgType} /> : null}
+          <div className="flex items-center gap-2">
+            {project.status === "completed" && (
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                Finalizado
+              </span>
+            )}
+            {isCreator ? <CreatorBadge /> : isOfficial ? <Badge orgType={project.orgType} /> : null}
+          </div>
         </div>
         <h3 className="text-lg font-semibold text-ink">{project.title}</h3>
         <div className="space-y-2">

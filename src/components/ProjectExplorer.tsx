@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Project, ProjectType } from "@/lib/types";
+import { CompletionStatus, Project, ProjectType } from "@/lib/types";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Leaderboard } from "@/components/Leaderboard";
 import { computeProjectMetrics } from "@/lib/data";
@@ -13,29 +13,33 @@ interface ProjectExplorerProps {
   title: string;
   subtitle: string;
   typeFilter?: ProjectType;
+  completionFilter?: CompletionStatus;
   infoText?: string;
 }
 
-export function ProjectExplorer({ title, subtitle, typeFilter, infoText }: ProjectExplorerProps) {
+export function ProjectExplorer({ title, subtitle, typeFilter, completionFilter, infoText }: ProjectExplorerProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [topBuilders, setTopBuilders] = useState<
     { donorId: string; donorName: string; total: number }[]
   >([]);
   const [zone, setZone] = useState("Todas");
   const [projectType, setProjectType] = useState("Todos");
+  const [completionStatus, setCompletionStatus] = useState("Todos");
   const [sortBy, setSortBy] = useState("urgentes");
 
   useEffect(() => {
     const params = new URLSearchParams();
-    params.set("status", "Approved");
+    params.set("fundingStatus", "Approved");
     if (zone !== "Todas") params.set("zone", zone);
     if (projectType !== "Todos") params.set("type", projectType);
     if (typeFilter) params.set("type", typeFilter);
+    if (completionStatus !== "Todos") params.set("completionStatus", completionStatus);
+    if (completionFilter) params.set("completionStatus", completionFilter);
 
     fetch(`/api/projects?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => setProjects(data.projects));
-  }, [zone, projectType, typeFilter]);
+  }, [zone, projectType, typeFilter, completionStatus, completionFilter]);
 
   useEffect(() => {
     fetch("/api/builders")
@@ -104,6 +108,20 @@ export function ProjectExplorer({ title, subtitle, typeFilter, infoText }: Proje
                 <option value="titulo">Alfabético</option>
               </select>
             </div>
+            {!completionFilter && (
+              <div>
+                <label className="text-xs font-semibold uppercase text-steel">Estado</label>
+                <select
+                  value={completionStatus}
+                  onChange={(event) => setCompletionStatus(event.target.value)}
+                  className="mt-2 w-full rounded-full border border-slate-200 bg-white px-4 py-2 text-sm"
+                >
+                  <option>Todos</option>
+                  <option value="active">Activo</option>
+                  <option value="completed">Finalizado</option>
+                </select>
+              </div>
+            )}
           </div>
         </div>
       </section>

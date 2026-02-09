@@ -84,13 +84,14 @@ export function DonationFlow({ project }: DonationFlowProps) {
   };
 
   const badgeLabel = selectedItem?.type === "unit" ? "Builder Nivel 1" : "Builder Nivel 2";
-  const isClosed = project.status !== "Approved";
+  const isClosed = project.fundingStatus !== "Approved" || project.status === "completed";
+  const statusLabel = project.status === "completed" ? "Finalizado" : project.fundingStatus;
 
   return (
     <>
       {isClosed && (
         <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          Este proyecto está en estado {project.status}. Las donaciones están pausadas.
+          Este proyecto está en estado {statusLabel}. Las donaciones están pausadas.
         </div>
       )}
       <div className="space-y-4">

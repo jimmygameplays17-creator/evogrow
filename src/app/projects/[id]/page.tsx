@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { DonationFlow } from "@/components/DonationFlow";
 import { Badge } from "@/components/Badge";
 import { ProgressBar } from "@/components/ProgressBar";
-import { ShareButton } from "@/components/ShareButton";
+import { CommentsSection } from "@/components/CommentsSection";
+import { ShareActions } from "@/components/ShareActions";
+import { ReportButton } from "@/components/ReportButton";
 import { Leaderboard } from "@/components/Leaderboard";
 import { CreatorBadge } from "@/components/CreatorBadge";
 import { computeProjectMetrics, getProjectById, getTopBuildersByProject } from "@/lib/data";
@@ -42,9 +44,14 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             <span className="font-semibold uppercase">{project.zone}</span>
             {isCreator ? <CreatorBadge /> : isOfficial ? <Badge orgType={project.orgType} /> : null}
             <span>Organiza: {project.organizer}</span>
-            {project.status !== "Approved" && (
+            {project.fundingStatus !== "Approved" && (
               <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                {project.status}
+                {project.fundingStatus}
+              </span>
+            )}
+            {project.status === "completed" && (
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                Finalizado
               </span>
             )}
           </div>
@@ -112,6 +119,8 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
               )}
             </div>
           </div>
+
+          <CommentsSection projectId={project.id} comments={project.comments} />
         </div>
 
         <aside className="space-y-6">
@@ -138,7 +147,17 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
           <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
             <h3 className="text-base font-semibold text-ink">Compartir proyecto</h3>
             <p className="mt-2 text-sm text-steel">Comparte el link para sumar builders.</p>
-            <ShareButton />
+            <div className="mt-4">
+              <ShareActions title={project.title} />
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <h3 className="text-base font-semibold text-ink">Reportar proyecto</h3>
+            <p className="mt-2 text-sm text-steel">Ayúdanos a mantener la comunidad segura.</p>
+            <div className="mt-4">
+              <ReportButton projectId={project.id} />
+            </div>
           </div>
         </aside>
       </section>

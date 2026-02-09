@@ -1,4 +1,5 @@
-export type ProjectStatus = "Pending" | "Approved" | "Rejected" | "Failed" | "Funded";
+export type FundingStatus = "Pending" | "Approved" | "Rejected" | "Failed" | "Funded";
+export type CompletionStatus = "active" | "completed";
 export type OrgType = "Community" | "Business" | "Government";
 export type BomType = "unit" | "total" | "flex";
 export type ProjectType = "official" | "community" | "creator";
@@ -34,6 +35,21 @@ export interface Donation {
   createdAt: string;
 }
 
+export interface Comment {
+  id: string;
+  projectId: string;
+  name: string;
+  text: string;
+  createdAt: string;
+}
+
+export interface Report {
+  id: string;
+  projectId: string;
+  reason?: string;
+  createdAt: string;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -52,8 +68,10 @@ export interface Project {
   goal: number;
   createdAt: string;
   durationDays: number;
-  status: ProjectStatus;
+  fundingStatus: FundingStatus;
+  status: CompletionStatus;
   bom: BomItem[];
   updates: ProjectUpdate[];
   donations: Donation[];
+  comments: Comment[];
 }

@@ -11,6 +11,8 @@ const navItems = [
   { href: "/creators", label: "Creadores" },
   { href: "/create", label: "Proponer" },
   { href: "/admin", label: "Admin" },
+  { href: "/completed", label: "Finalizados" },
+  { href: "/profile", label: "Perfil" },
   { href: "/builders", label: "Top Builders" }
 ];
 

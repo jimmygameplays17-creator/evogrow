@@ -1,4 +1,14 @@
-import { BomItem, Donation, OrgType, Project, ProjectStatus, ProjectType } from "@/lib/types";
+import {
+  BomItem,
+  Comment,
+  CompletionStatus,
+  Donation,
+  FundingStatus,
+  OrgType,
+  Project,
+  ProjectType,
+  Report
+} from "@/lib/types";
 
 const zones = ["Fuentes de las Lomas", "Interlomas", "Naucalpan"];
 
@@ -19,7 +29,8 @@ const seedProjects: Project[] = [
     goal: 280000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 8).toISOString(),
     durationDays: 30,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "active",
     bom: [
       {
         id: "b1",
@@ -132,6 +143,22 @@ const seedProjects: Project[] = [
         status: "Confirmed",
         createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString()
       }
+    ],
+    comments: [
+      {
+        id: "c1",
+        projectId: "p1",
+        name: "Julio P.",
+        text: "Buenísimo ver transparencia en materiales. ¡Éxito!",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString()
+      },
+      {
+        id: "c2",
+        projectId: "p1",
+        name: "Ana Q.",
+        text: "¿Cuándo empiezan las obras? Me gustaría ayudar.",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString()
+      }
     ]
   },
   {
@@ -148,7 +175,8 @@ const seedProjects: Project[] = [
     goal: 180000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
     durationDays: 20,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "completed",
     bom: [
       {
         id: "b6",
@@ -226,6 +254,15 @@ const seedProjects: Project[] = [
         status: "Confirmed",
         createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString()
       }
+    ],
+    comments: [
+      {
+        id: "c3",
+        projectId: "p2",
+        name: "Majo",
+        text: "Se nota la mejora en la avenida. Gracias.",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString()
+      }
     ]
   },
   {
@@ -242,7 +279,8 @@ const seedProjects: Project[] = [
     goal: 320000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
     durationDays: 25,
-    status: "Pending",
+    fundingStatus: "Pending",
+    status: "active",
     bom: [
       {
         id: "b9",
@@ -272,7 +310,8 @@ const seedProjects: Project[] = [
       }
     ],
     updates: [],
-    donations: []
+    donations: [],
+    comments: []
   },
   {
     id: "p4",
@@ -287,10 +326,12 @@ const seedProjects: Project[] = [
     goal: 50000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 4).toISOString(),
     durationDays: 21,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "active",
     bom: [],
     updates: [],
-    donations: []
+    donations: [],
+    comments: []
   },
   {
     id: "p5",
@@ -305,10 +346,12 @@ const seedProjects: Project[] = [
     goal: 12000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 6).toISOString(),
     durationDays: 20,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "active",
     bom: [],
     updates: [],
-    donations: []
+    donations: [],
+    comments: []
   },
   {
     id: "p6",
@@ -323,10 +366,12 @@ const seedProjects: Project[] = [
     goal: 8500,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
     durationDays: 18,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "active",
     bom: [],
     updates: [],
-    donations: []
+    donations: [],
+    comments: []
   },
   {
     id: "p7",
@@ -341,10 +386,12 @@ const seedProjects: Project[] = [
     goal: 1200,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
     durationDays: 14,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "active",
     bom: [],
     updates: [],
-    donations: []
+    donations: [],
+    comments: []
   },
   {
     id: "p8",
@@ -359,10 +406,12 @@ const seedProjects: Project[] = [
     goal: 900,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString(),
     durationDays: 12,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "active",
     bom: [],
     updates: [],
-    donations: []
+    donations: [],
+    comments: []
   },
   {
     id: "p9",
@@ -377,10 +426,12 @@ const seedProjects: Project[] = [
     goal: 500,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
     durationDays: 7,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "active",
     bom: [],
     updates: [],
-    donations: []
+    donations: [],
+    comments: []
   },
   {
     id: "p10",
@@ -398,10 +449,12 @@ const seedProjects: Project[] = [
     goal: 100000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
     durationDays: 20,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "active",
     bom: [],
     updates: [],
-    donations: []
+    donations: [],
+    comments: []
   },
   {
     id: "p11",
@@ -419,10 +472,12 @@ const seedProjects: Project[] = [
     goal: 80000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
     durationDays: 18,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "active",
     bom: [],
     updates: [],
-    donations: []
+    donations: [],
+    comments: []
   },
   {
     id: "p12",
@@ -440,14 +495,17 @@ const seedProjects: Project[] = [
     goal: 60000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
     durationDays: 22,
-    status: "Approved",
+    fundingStatus: "Approved",
+    status: "active",
     bom: [],
     updates: [],
-    donations: []
+    donations: [],
+    comments: []
   }
 ];
 
 let projects = seedProjects;
+let reports: Report[] = [];
 
 const createId = (prefix: string) => `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
 
@@ -468,17 +526,17 @@ const applyStatusRules = (project: Project) => {
   const deadline = computeDeadline(project);
   const now = new Date();
 
-  if (project.status === "Rejected") {
+  if (project.fundingStatus === "Rejected") {
     return project;
   }
 
   if (total >= project.goal) {
-    project.status = "Funded";
+    project.fundingStatus = "Funded";
     return project;
   }
 
-  if (now > deadline && project.status === "Approved") {
-    project.status = "Failed";
+  if (now > deadline && project.fundingStatus === "Approved") {
+    project.fundingStatus = "Failed";
     project.donations = project.donations.map((donation) => ({
       ...donation,
       status: "Refunded"
@@ -511,13 +569,20 @@ const normalizeProject = (project: Project) => {
 
 export const getZones = () => zones;
 
-export const listProjects = (status?: ProjectStatus, zone?: string, orgType?: OrgType, type?: ProjectType) => {
+export const listProjects = (
+  fundingStatus?: FundingStatus,
+  zone?: string,
+  orgType?: OrgType,
+  type?: ProjectType,
+  completionStatus?: CompletionStatus
+) => {
   const filtered = projects
     .map(normalizeProject)
-    .filter((project) => (status ? project.status === status : true))
+    .filter((project) => (fundingStatus ? project.fundingStatus === fundingStatus : true))
     .filter((project) => (zone ? project.zone === zone : true))
     .filter((project) => (orgType ? project.orgType === orgType : true))
-    .filter((project) => (type ? project.type === type : true));
+    .filter((project) => (type ? project.type === type : true))
+    .filter((project) => (completionStatus ? project.status === completionStatus : true));
   return filtered;
 };
 
@@ -526,23 +591,27 @@ export const getProjectById = (id: string) => {
   return project ? normalizeProject(project) : null;
 };
 
-export const createProject = (payload: Omit<Project, "id" | "status" | "createdAt" | "donations" | "updates">) => {
+export const createProject = (
+  payload: Omit<Project, "id" | "fundingStatus" | "status" | "createdAt" | "donations" | "updates" | "comments">
+) => {
   const newProject: Project = {
     ...payload,
     id: createId("project"),
-    status: "Pending",
+    fundingStatus: "Pending",
+    status: "active",
     createdAt: new Date().toISOString(),
     donations: [],
-    updates: []
+    updates: [],
+    comments: []
   };
   projects = [newProject, ...projects];
   return newProject;
 };
 
-export const updateProjectStatus = (id: string, status: ProjectStatus) => {
+export const updateProjectStatus = (id: string, status: FundingStatus) => {
   projects = projects.map((project) => {
     if (project.id !== id) return project;
-    return { ...project, status };
+    return { ...project, fundingStatus: status };
   });
   return getProjectById(id);
 };
@@ -552,7 +621,12 @@ export const addDonation = (projectId: string, donation: Omit<Donation, "id" | "
   if (!project) return null;
 
   const normalized = normalizeProject(project);
-  if (normalized.status === "Funded" || normalized.status === "Failed" || normalized.status === "Rejected") {
+  if (
+    normalized.fundingStatus === "Funded" ||
+    normalized.fundingStatus === "Failed" ||
+    normalized.fundingStatus === "Rejected" ||
+    normalized.status === "completed"
+  ) {
     return { error: "ProjectClosed" } as const;
   }
 
@@ -597,6 +671,45 @@ export const computeProjectMetrics = (project: Project) => {
   const daysRemaining = Math.max(0, Math.ceil((deadline.getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
   const progress = Math.min(100, (totalRaised / project.goal) * 100);
   return { totalRaised, deadline, daysRemaining, progress };
+};
+
+export const addComment = (projectId: string, name: string, text: string) => {
+  const project = projects.find((item) => item.id === projectId);
+  if (!project) return null;
+  const newComment: Comment = {
+    id: createId("comment"),
+    projectId,
+    name,
+    text,
+    createdAt: new Date().toISOString()
+  };
+  project.comments = [newComment, ...project.comments];
+  return newComment;
+};
+
+export const addReport = (projectId: string, reason?: string) => {
+  const report: Report = {
+    id: createId("report"),
+    projectId,
+    reason,
+    createdAt: new Date().toISOString()
+  };
+  reports = [report, ...reports];
+  return report;
+};
+
+export const getReports = () => reports;
+
+export const getProfileSummary = (userId: string) => {
+  const allProjects = projects.map(normalizeProject);
+  const donations = allProjects.flatMap((project) => project.donations);
+  const totalDonated = donations
+    .filter((donation) => donation.status === "Confirmed" && donation.donorId === userId)
+    .reduce((sum, donation) => sum + donation.amount, 0);
+  const projectsDonated = allProjects.filter((project) =>
+    project.donations.some((donation) => donation.donorId === userId)
+  );
+  return { totalDonated, projectsDonated };
 };
 
 const computeDonorTotals = (donations: Donation[]) => {

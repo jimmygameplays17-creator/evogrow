@@ -6,6 +6,7 @@ export default function CommunityPage() {
       title="Proyectos impulsados por la comunidad"
       subtitle="Comunidad"
       typeFilter="community"
+      infoText="Comunidad: campañas libres creadas por personas. Apoya lo que tú quieras. No son proyectos oficiales."
     />
   );
 }

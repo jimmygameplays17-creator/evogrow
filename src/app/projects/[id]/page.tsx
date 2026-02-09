@@ -52,6 +52,11 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             </div>
           </div>
           <p className="text-sm text-steel">{project.description}</p>
+          {!isOfficial && (
+            <p className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+              Campaña creada por un usuario. Verifica antes de donar.
+            </p>
+          )}
         </div>
       </section>
 

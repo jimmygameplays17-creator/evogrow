@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BomItem, BomType, OrgType, ProjectType } from "@/lib/types";
+import { BomItem, BomType, CommunityCategory, OrgType, ProjectType } from "@/lib/types";
 
 const zones = ["Fuentes de las Lomas", "Interlomas", "Naucalpan"];
+const communityCategories: CommunityCategory[] = ["Personal", "Mascotas", "Escuela", "Hogar", "Transporte", "Otro"];
 
 interface DraftItem {
   id: string;
@@ -27,6 +28,7 @@ export default function CreateProjectPage() {
     "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
   );
   const [projectType, setProjectType] = useState<ProjectType>("community");
+  const [category, setCategory] = useState<CommunityCategory>("Personal");
   const [organizer, setOrganizer] = useState("");
   const [orgType, setOrgType] = useState<OrgType>("Government");
   const [verificationDoc, setVerificationDoc] = useState("");
@@ -87,6 +89,7 @@ export default function CreateProjectPage() {
         orgType: projectType === "official" ? orgType : "Community",
         type: projectType,
         verificationDoc: projectType === "official" ? verificationDoc : undefined,
+        category: projectType === "community" ? category : undefined,
         bom
       })
     });
@@ -166,6 +169,11 @@ export default function CreateProjectPage() {
               <option value="community">Comunidad</option>
               <option value="official">Oficial</option>
             </select>
+            {projectType === "community" && (
+              <p className="text-xs text-steel">
+                Comunidad: campañas libres creadas por personas. Apoya lo que tú quieras. No son proyectos oficiales.
+              </p>
+            )}
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold uppercase text-steel">Organizador</label>
@@ -175,6 +183,22 @@ export default function CreateProjectPage() {
               className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
             />
           </div>
+          {projectType === "community" && (
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase text-steel">Categoría</label>
+              <select
+                value={category}
+                onChange={(event) => setCategory(event.target.value as CommunityCategory)}
+                className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+              >
+                {communityCategories.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           {projectType === "official" && (
             <>
               <div className="space-y-2">

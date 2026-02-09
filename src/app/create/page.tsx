@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BomItem, BomType, OrgType } from "@/lib/types";
+import { BomItem, BomType, OrgType, ProjectType } from "@/lib/types";
 
 const zones = ["Fuentes de las Lomas", "Interlomas", "Naucalpan"];
 
@@ -26,8 +26,10 @@ export default function CreateProjectPage() {
   const [coverImage, setCoverImage] = useState(
     "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
   );
+  const [projectType, setProjectType] = useState<ProjectType>("community");
   const [organizer, setOrganizer] = useState("");
-  const [orgType, setOrgType] = useState<OrgType>("Community");
+  const [orgType, setOrgType] = useState<OrgType>("Government");
+  const [verificationDoc, setVerificationDoc] = useState("");
   const [items, setItems] = useState<DraftItem[]>([
     {
       id: "draft-1",
@@ -82,7 +84,9 @@ export default function CreateProjectPage() {
         durationDays,
         coverImage,
         organizer,
-        orgType,
+        orgType: projectType === "official" ? orgType : "Community",
+        type: projectType,
+        verificationDoc: projectType === "official" ? verificationDoc : undefined,
         bom
       })
     });
@@ -153,6 +157,17 @@ export default function CreateProjectPage() {
             />
           </div>
           <div className="space-y-2">
+            <label className="text-xs font-semibold uppercase text-steel">Tipo de proyecto</label>
+            <select
+              value={projectType}
+              onChange={(event) => setProjectType(event.target.value as ProjectType)}
+              className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+            >
+              <option value="community">Comunidad</option>
+              <option value="official">Oficial</option>
+            </select>
+          </div>
+          <div className="space-y-2">
             <label className="text-xs font-semibold uppercase text-steel">Organizador</label>
             <input
               value={organizer}
@@ -160,18 +175,30 @@ export default function CreateProjectPage() {
               className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-steel">Tipo</label>
-            <select
-              value={orgType}
-              onChange={(event) => setOrgType(event.target.value as OrgType)}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
-            >
-              <option value="Community">Community</option>
-              <option value="Business">Business</option>
-              <option value="Government">Government</option>
-            </select>
-          </div>
+          {projectType === "official" && (
+            <>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase text-steel">Tipo de entidad</label>
+                <select
+                  value={orgType}
+                  onChange={(event) => setOrgType(event.target.value as OrgType)}
+                  className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                >
+                  <option value="Business">Empresa</option>
+                  <option value="Government">Gobierno</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase text-steel">Prueba de verificación</label>
+                <input
+                  value={verificationDoc}
+                  onChange={(event) => setVerificationDoc(event.target.value)}
+                  className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                  placeholder="URL o folio de verificación"
+                />
+              </div>
+            </>
+          )}
         </div>
 
         <div className="mt-8 space-y-4">

@@ -6,6 +6,8 @@ import classNames from "classnames";
 
 const navItems = [
   { href: "/", label: "Explorar" },
+  { href: "/officials", label: "Oficial" },
+  { href: "/community", label: "Comunidad" },
   { href: "/create", label: "Proponer" },
   { href: "/admin", label: "Admin" },
   { href: "/builders", label: "Top Builders" }

@@ -1,6 +1,7 @@
 export type ProjectStatus = "Pending" | "Approved" | "Rejected" | "Failed" | "Funded";
 export type OrgType = "Community" | "Business" | "Government";
 export type BomType = "unit" | "total" | "flex";
+export type ProjectType = "official" | "community";
 
 export interface BomItem {
   id: string;
@@ -40,6 +41,8 @@ export interface Project {
   description: string;
   organizer: string;
   orgType: OrgType;
+  type: ProjectType;
+  verificationDoc?: string;
   goal: number;
   createdAt: string;
   durationDays: number;

@@ -1,5 +1,4 @@
 import { OrgType } from "@/lib/types";
-import { getBadgeLabel } from "@/lib/data";
 import classNames from "classnames";
 
 const colorMap: Record<OrgType, string> = {
@@ -11,7 +10,7 @@ const colorMap: Record<OrgType, string> = {
 export function Badge({ orgType }: { orgType: OrgType }) {
   return (
     <span className={classNames("rounded-full px-3 py-1 text-xs font-semibold", colorMap[orgType])}>
-      {getBadgeLabel(orgType)}
+      Verified
     </span>
   );
 }

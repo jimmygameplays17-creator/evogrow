@@ -17,18 +17,24 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   if (!project) return notFound();
 
   const metrics = computeProjectMetrics(project);
+  const isOfficial = project.type === "official";
   const topBuilders = getTopBuildersByProject(project.id, 5);
 
   return (
     <main className="mx-auto max-w-6xl px-6 pb-28 pt-10">
-      <section className="overflow-hidden rounded-3xl bg-white shadow-card">
+      <section
+        className={[
+          "overflow-hidden rounded-3xl shadow-card",
+          isOfficial ? "border border-blue-100 bg-blue-50/40" : "bg-white"
+        ].join(" ")}
+      >
         <div className="relative h-64 w-full">
           <Image src={project.coverImage} alt={project.title} fill className="object-cover" />
         </div>
         <div className="space-y-4 px-6 py-6">
           <div className="flex flex-wrap items-center gap-3 text-sm text-steel">
             <span className="font-semibold uppercase">{project.zone}</span>
-            <Badge orgType={project.orgType} />
+            {isOfficial && <Badge orgType={project.orgType} />}
             <span>Organiza: {project.organizer}</span>
             {project.status !== "Approved" && (
               <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">

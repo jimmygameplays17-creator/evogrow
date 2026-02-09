@@ -1,4 +1,4 @@
-import { BomItem, Donation, OrgType, Project, ProjectStatus } from "@/lib/types";
+import { BomItem, Donation, OrgType, Project, ProjectStatus, ProjectType } from "@/lib/types";
 
 const zones = ["Fuentes de las Lomas", "Interlomas", "Naucalpan"];
 
@@ -7,13 +7,15 @@ const currentUserId = "user_me";
 const seedProjects: Project[] = [
   {
     id: "p1",
-    title: "Cancha comunitaria Las Palmas",
+    title: "Cancha pública Las Palmas",
     zone: "Fuentes de las Lomas",
     coverImage: "https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?auto=format&fit=crop&w=1200&q=80",
     description:
       "Rehabilitación integral de la cancha con iluminación, pasto sintético y mobiliario deportivo para uso seguro de la comunidad.",
-    organizer: "Colectivo Las Palmas",
-    orgType: "Community",
+    organizer: "Municipio de Huixquilucan",
+    orgType: "Government",
+    type: "official",
+    verificationDoc: "Oficio MUNI-2024-089",
     goal: 280000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 8).toISOString(),
     durationDays: 30,
@@ -84,7 +86,7 @@ const seedProjects: Project[] = [
         id: "d1",
         projectId: "p1",
         itemId: "b1",
-        donorId: "donor_grupo_ima",
+        donorId: "donor_maria",
         donorName: "María López",
         amount: 6000,
         status: "Confirmed",
@@ -94,7 +96,7 @@ const seedProjects: Project[] = [
         id: "d2",
         projectId: "p1",
         itemId: "b3",
-        donorId: "donor_erpp",
+        donorId: "donor_fer",
         donorName: "Fer Alvarez",
         amount: 12000,
         status: "Confirmed",
@@ -141,6 +143,8 @@ const seedProjects: Project[] = [
       "Reparación de 18 baches críticos con mezcla asfáltica de alto desempeño y señalización preventiva.",
     organizer: "Obras Naucalpan",
     orgType: "Government",
+    type: "official",
+    verificationDoc: "Dictamen 2024-INFRA-33",
     goal: 180000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
     durationDays: 20,
@@ -187,7 +191,7 @@ const seedProjects: Project[] = [
         projectId: "p2",
         itemId: "b6",
         donorId: "donor_grupo_ima",
-        donorName: "Constructora Vía",
+        donorName: "Grupo IMA",
         amount: 30000,
         status: "Confirmed",
         createdAt: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString()
@@ -233,6 +237,8 @@ const seedProjects: Project[] = [
       "Creación de un parque lineal con luminarias solares, bancas y jardinería para mejorar la seguridad peatonal.",
     organizer: "Empresa VerdeMX",
     orgType: "Business",
+    type: "official",
+    verificationDoc: "Registro CSR-VERDEMX-2024",
     goal: 320000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
     durationDays: 25,
@@ -263,6 +269,105 @@ const seedProjects: Project[] = [
         totalPrice: 60000,
         fundedAmount: 0,
         neededByWeek: 4
+      }
+    ],
+    updates: [],
+    donations: []
+  },
+  {
+    id: "p4",
+    title: "Refugio para mascotas La Piedad",
+    zone: "Naucalpan",
+    coverImage: "https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Campaña vecinal para acondicionar un espacio temporal para rescate y esterilización de mascotas.",
+    organizer: "Vecinos La Piedad",
+    orgType: "Community",
+    type: "community",
+    goal: 45000,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 4).toISOString(),
+    durationDays: 21,
+    status: "Approved",
+    bom: [
+      {
+        id: "b12",
+        name: "Jaulas de resguardo",
+        type: "unit",
+        qty: 6,
+        unitPrice: 2500,
+        fundedAmount: 5000,
+        neededByWeek: 1
+      },
+      {
+        id: "b13",
+        name: "Kit veterinario",
+        type: "flex",
+        totalPrice: 15000,
+        fundedAmount: 3500,
+        neededByWeek: 2
+      }
+    ],
+    updates: [],
+    donations: []
+  },
+  {
+    id: "p5",
+    title: "Cuarto de estudio comunitario",
+    zone: "Fuentes de las Lomas",
+    coverImage: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Habilitar un cuarto tranquilo con mobiliario para jóvenes que necesitan un espacio para estudiar.",
+    organizer: "Colectivo Juvenil",
+    orgType: "Community",
+    type: "community",
+    goal: 65000,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 6).toISOString(),
+    durationDays: 28,
+    status: "Approved",
+    bom: [
+      {
+        id: "b14",
+        name: "Escritorios",
+        type: "unit",
+        qty: 8,
+        unitPrice: 1800,
+        fundedAmount: 3600,
+        neededByWeek: 2
+      },
+      {
+        id: "b15",
+        name: "Iluminación interior",
+        type: "total",
+        totalPrice: 12000,
+        fundedAmount: 2000,
+        neededByWeek: 3
+      }
+    ],
+    updates: [],
+    donations: []
+  },
+  {
+    id: "p6",
+    title: "Operación Sonrisas",
+    zone: "Interlomas",
+    coverImage: "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Colecta solidaria para cubrir cirugías y tratamientos dentales de adultos mayores.",
+    organizer: "Red de Apoyo Sonrisas",
+    orgType: "Community",
+    type: "community",
+    goal: 90000,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+    durationDays: 25,
+    status: "Pending",
+    bom: [
+      {
+        id: "b16",
+        name: "Tratamientos dentales",
+        type: "flex",
+        totalPrice: 60000,
+        fundedAmount: 0,
+        neededByWeek: 3
       }
     ],
     updates: [],
@@ -334,12 +439,13 @@ const normalizeProject = (project: Project) => {
 
 export const getZones = () => zones;
 
-export const listProjects = (status?: ProjectStatus, zone?: string, orgType?: OrgType) => {
+export const listProjects = (status?: ProjectStatus, zone?: string, orgType?: OrgType, type?: ProjectType) => {
   const filtered = projects
     .map(normalizeProject)
     .filter((project) => (status ? project.status === status : true))
     .filter((project) => (zone ? project.zone === zone : true))
-    .filter((project) => (orgType ? project.orgType === orgType : true));
+    .filter((project) => (orgType ? project.orgType === orgType : true))
+    .filter((project) => (type ? project.type === type : true));
   return filtered;
 };
 
@@ -469,8 +575,3 @@ export const getMyRankGlobal = (userId: string) => {
 };
 
 export const getCurrentUserId = () => currentUserId;
-
-export const getBadgeLabel = (orgType: OrgType) => {
-  if (orgType === "Community") return "Community";
-  return "Verified";
-};

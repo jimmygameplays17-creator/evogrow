@@ -31,8 +31,10 @@ export interface Donation {
   donorId: string;
   donorName: string;
   amount: number;
-  status: "Confirmed" | "Refunded";
+  status: "Pending" | "Confirmed" | "Refunded";
   createdAt: string;
+  paymentMethod?: string;
+  reference?: string;
 }
 
 export interface Comment {

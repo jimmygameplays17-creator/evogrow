@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Project } from "@/lib/types";
 import { computeProjectMetrics } from "@/lib/data";
-import { formatCurrency } from "@/lib/utils";
+import { Money } from "@/components/Money";
 import { ProgressBar } from "@/components/ProgressBar";
 import { Badge } from "@/components/Badge";
 import { CreatorBadge } from "@/components/CreatorBadge";
@@ -38,11 +38,15 @@ export function ProjectCard({ project }: { project: Project }) {
         <div className="space-y-2">
           <ProgressBar value={metrics.progress} />
           <div className="flex items-center justify-between text-sm text-steel">
-            <span>{formatCurrency(metrics.totalRaised)} recaudado</span>
+            <span>
+              <Money amount={metrics.totalRaised} /> recaudado
+            </span>
             <span>{Math.round(metrics.progress)}%</span>
           </div>
           <div className="flex items-center justify-between text-xs text-steel">
-            <span>Meta {formatCurrency(project.goal)}</span>
+            <span>
+              Meta <Money amount={project.goal} />
+            </span>
             <span>{metrics.daysRemaining} días restantes</span>
           </div>
         </div>

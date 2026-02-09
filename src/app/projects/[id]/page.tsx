@@ -9,7 +9,8 @@ import { ReportButton } from "@/components/ReportButton";
 import { Leaderboard } from "@/components/Leaderboard";
 import { CreatorBadge } from "@/components/CreatorBadge";
 import { computeProjectMetrics, getProjectById, getTopBuildersByProject } from "@/lib/data";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
+import { Money } from "@/components/Money";
 
 interface ProjectDetailPageProps {
   params: { id: string };
@@ -59,8 +60,12 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
           <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
             <ProgressBar value={metrics.progress} />
             <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-steel">
-              <span>{formatCurrency(metrics.totalRaised)} recaudado</span>
-              <span>Meta {formatCurrency(project.goal)}</span>
+              <span>
+                <Money amount={metrics.totalRaised} /> recaudado
+              </span>
+              <span>
+                Meta <Money amount={project.goal} />
+              </span>
               <span>{metrics.daysRemaining} días restantes</span>
             </div>
           </div>
@@ -130,7 +135,9 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
               {project.donations.map((donation) => (
                 <li key={donation.id} className="flex items-center justify-between">
                   <span>{donation.donorName}</span>
-                  <span className="font-semibold text-ink">{formatCurrency(donation.amount)}</span>
+                  <span className="font-semibold text-ink">
+                    <Money amount={donation.amount} />
+                  </span>
                 </li>
               ))}
               {project.donations.length === 0 && <li>No hay donaciones todavía.</li>}

@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 import classNames from "classnames";
 import { HeaderNav } from "@/components/HeaderNav";
+import { CurrencyProvider } from "@/components/CurrencyProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <HeaderNav />
           </div>
         </div>
-        {children}
+        <CurrencyProvider>{children}</CurrencyProvider>
       </body>
     </html>
   );

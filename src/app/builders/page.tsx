@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Leaderboard } from "@/components/Leaderboard";
 import { getCurrentUserId, getMyRankGlobal, getTopBuildersGlobal } from "@/lib/data";
-import { formatCurrency } from "@/lib/utils";
+import { Money } from "@/components/Money";
 
 export default function BuildersPage() {
-  const leaderboard = getTopBuildersGlobal(10);
+  const leaderboard = getTopBuildersGlobal(100);
   const currentUserId = getCurrentUserId();
   const myRank = getMyRankGlobal(currentUserId);
 
@@ -16,8 +16,17 @@ export default function BuildersPage() {
           <p className="text-sm text-steel">Los que más han construido la comunidad este mes</p>
         </div>
 
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-steel">
+          <p>
+            Tu ranking: <span className="font-semibold text-ink">#{myRank.rank ?? "-"}</span> • Total:{" "}
+            <span className="font-semibold text-ink">
+              <Money amount={myRank.total} />
+            </span>
+          </p>
+        </div>
+
         <div className="mt-6">
-          <Leaderboard entries={leaderboard} />
+          <Leaderboard entries={leaderboard} highlightId={currentUserId} showTopBadges />
         </div>
 
         <div className="mt-8 rounded-3xl border border-slate-200 bg-slate-50 p-6">
@@ -30,7 +39,9 @@ export default function BuildersPage() {
               </div>
               <div className="rounded-2xl border border-slate-200 bg-white p-4">
                 <p className="text-xs font-semibold uppercase text-steel">Total donado</p>
-                <p className="mt-2 text-lg font-semibold text-ink">{formatCurrency(myRank.total)}</p>
+                <p className="mt-2 text-lg font-semibold text-ink">
+                  <Money amount={myRank.total} />
+                </p>
               </div>
             </div>
           ) : (

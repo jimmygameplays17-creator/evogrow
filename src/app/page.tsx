@@ -5,6 +5,7 @@ export default function HomePage() {
     <ProjectExplorer
       title="Crowdfunding local con transparencia total"
       subtitle="Explora proyectos cercanos"
+      showTopBuildersPreview={false}
     />
   );
 }

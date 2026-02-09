@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { formatCurrency } from "@/lib/utils";
+import { Money } from "@/components/Money";
 
 interface LeaderboardEntry {
   donorId: string;
@@ -12,19 +12,33 @@ interface LeaderboardEntry {
 interface LeaderboardProps {
   entries: LeaderboardEntry[];
   highlightTop?: boolean;
+  highlightId?: string;
+  showTopBadges?: boolean;
 }
 
-export function Leaderboard({ entries, highlightTop = true }: LeaderboardProps) {
+export function Leaderboard({
+  entries,
+  highlightTop = true,
+  highlightId,
+  showTopBadges = false
+}: LeaderboardProps) {
   return (
     <div className="space-y-3">
       {entries.map((entry, index) => {
         const isTop = highlightTop && index === 0;
+        const isHighlighted = highlightId === entry.donorId;
+        const showBadge = showTopBadges && index < 3;
+        const topIcon = index === 0 ? "👑" : index === 1 ? "🥈" : "🥉";
         return (
           <div
             key={entry.donorId}
             className={classNames(
               "flex items-center justify-between rounded-2xl border px-4 py-3 text-sm",
-              isTop ? "border-amber-200 bg-amber-50" : "border-slate-200 bg-white"
+              isHighlighted
+                ? "border-emerald-200 bg-emerald-50"
+                : isTop
+                  ? "border-amber-200 bg-amber-50"
+                  : "border-slate-200 bg-white"
             )}
           >
             <div className="flex items-center gap-3">
@@ -33,10 +47,20 @@ export function Leaderboard({ entries, highlightTop = true }: LeaderboardProps) 
               </span>
               <div>
                 <p className="font-semibold text-ink">{entry.donorName}</p>
-                <p className="text-xs text-steel">{formatCurrency(entry.total)} donado</p>
+                <p className="text-xs text-steel">
+                  <Money amount={entry.total} /> donado
+                </p>
               </div>
             </div>
-            {isTop && <span className="text-lg">👑</span>}
+            <div className="flex items-center gap-2">
+              {isHighlighted && (
+                <span className="rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-700">
+                  Tú
+                </span>
+              )}
+              {showBadge && <span className="text-lg">{topIcon}</span>}
+              {isTop && !showBadge && <span className="text-lg">👑</span>}
+            </div>
           </div>
         );
       })}

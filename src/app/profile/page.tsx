@@ -1,9 +1,10 @@
-import { getCurrentUserId, getProfileSummary } from "@/lib/data";
-import { formatCurrency } from "@/lib/utils";
+import { getCurrentUserId, getMyRankGlobal, getProfileSummary } from "@/lib/data";
+import { Money } from "@/components/Money";
 
 export default function ProfilePage() {
   const userId = getCurrentUserId();
   const { totalDonated, projectsDonated } = getProfileSummary(userId);
+  const myRank = getMyRankGlobal(userId);
   const hasBuilderBadge = totalDonated >= 1000;
 
   return (
@@ -23,8 +24,14 @@ export default function ProfilePage() {
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p className="text-xs font-semibold uppercase text-steel">Tu ranking global</p>
+            <p className="mt-2 text-lg font-semibold text-ink">#{myRank.rank ?? "-"}</p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
             <p className="text-xs font-semibold uppercase text-steel">Total donado</p>
-            <p className="mt-2 text-lg font-semibold text-ink">{formatCurrency(totalDonated)}</p>
+            <p className="mt-2 text-lg font-semibold text-ink">
+              <Money amount={myRank.total} />
+            </p>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
             <p className="text-xs font-semibold uppercase text-steel">Proyectos apoyados</p>

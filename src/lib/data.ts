@@ -506,8 +506,141 @@ const seedProjects: Project[] = [
 
 let projects = seedProjects;
 let reports: Report[] = [];
+let topBuildersSeed: { donorId: string; donorName: string; total: number }[] = [];
+let payments: Record<string, { donationId: string; status: "pending" | "confirmed"; createdAt: string }> = {};
 
 const createId = (prefix: string) => `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
+
+const seedTopBuilders = () => {
+  const userTotal = 45000;
+  const higherTotals = Array.from({ length: 68 }, (_, index) => 500000 - index * 6000);
+  const lowerTotals = Array.from({ length: 30 }, (_, index) => 44000 - index * 900);
+
+  const higherNames = [
+    "Alma Ruiz",
+    "Fernando Ortiz",
+    "Sofía Torres",
+    "Luis Navarro",
+    "Mariana Vega",
+    "Rafael Domínguez",
+    "Paola Reyes",
+    "Jorge Campos",
+    "Lucía Paredes",
+    "Gustavo León",
+    "Andrea Morales",
+    "Diego Rojas",
+    "Valeria Márquez",
+    "Héctor Gil",
+    "Camila Vives",
+    "Ricardo Luna",
+    "Renata Cruz",
+    "Carlos Ibarra",
+    "Isabela Mena",
+    "Iván Soto",
+    "Natalia Rangel",
+    "Bruno Castillo",
+    "María Fernanda",
+    "Ángel Navarro",
+    "Paulina Vega",
+    "Joaquín Medina",
+    "Fernanda Solís",
+    "Leonardo Peña",
+    "Karina Silva",
+    "Diego Cabrera",
+    "Sara Márquez",
+    "Hugo Escobar",
+    "Andrea Soto",
+    "Eduardo Carrillo",
+    "Mónica Prieto",
+    "Felipe Hernández",
+    "Romina Aguilar",
+    "Adrián Bautista",
+    "Gabriela Muñoz",
+    "Miguel Castañeda",
+    "Claudia Fuentes",
+    "Sebastián Ríos",
+    "René Ávila",
+    "Paula Ortiz",
+    "Patricio Lara",
+    "Santiago Ramos",
+    "Laura Cid",
+    "Ana Belén",
+    "Mateo Figueroa",
+    "Violeta Ochoa",
+    "Tomás Salas",
+    "Regina Montes",
+    "Oscar Medina",
+    "Fabiola León",
+    "Julián Carrasco",
+    "Patricia Aranda",
+    "Cristóbal Vera",
+    "Daniela Gil",
+    "Esteban Torres",
+    "Beatriz Esparza",
+    "Mauricio Campos",
+    "Nicolás Aguirre",
+    "Elena Cárdenas",
+    "Samuel Lozano",
+    "Pilar Fuentes",
+    "Sergio Palacios",
+    "Inés Jiménez",
+    "Rodrigo Meza"
+  ];
+
+  const lowerNames = [
+    "Carmen Díaz",
+    "Luisa Ponce",
+    "Mateo Valencia",
+    "Daniela Córdova",
+    "Marco Silva",
+    "Laura Suárez",
+    "Pablo Mendoza",
+    "Carolina Guerra",
+    "Javier Núñez",
+    "Melissa Orozco",
+    "Octavio Ramos",
+    "Julia Martínez",
+    "Fernando Lara",
+    "Maribel Sandoval",
+    "Raúl Padilla",
+    "Victoria Arévalo",
+    "Santiago Luna",
+    "Elisa Cárdenas",
+    "Alfonso Prieto",
+    "Hilda Moreno",
+    "Gonzalo Iglesias",
+    "Ariana Solís",
+    "Héctor Salgado",
+    "Liliana Trejo",
+    "Sofía Calderón",
+    "Daniel Ponce",
+    "Rosa Delgado",
+    "Luisana Pineda",
+    "Agustín Vega",
+    "Mariano Mora"
+  ];
+
+  const higherEntries = higherNames.map((name, index) => ({
+    donorId: `donor_high_${index + 1}`,
+    donorName: name,
+    total: higherTotals[index]
+  }));
+
+  const lowerEntries = lowerNames.map((name, index) => ({
+    donorId: `donor_low_${index + 1}`,
+    donorName: name,
+    total: lowerTotals[index]
+  }));
+
+  topBuildersSeed = [
+    { donorId: "grupo_ima", donorName: "Grupo IMA", total: 9000000 },
+    ...higherEntries,
+    { donorId: currentUserId, donorName: "Tú", total: userTotal },
+    ...lowerEntries
+  ].sort((a, b) => b.total - a.total);
+};
+
+seedTopBuilders();
 
 const computeGoalProgress = (project: Project) => {
   const total = project.donations
@@ -642,6 +775,51 @@ export const addDonation = (projectId: string, donation: Omit<Donation, "id" | "
   return newDonation;
 };
 
+export const addPendingDonation = (
+  projectId: string,
+  donation: Omit<Donation, "id" | "status" | "createdAt">
+) => {
+  const project = projects.find((item) => item.id === projectId);
+  if (!project) return null;
+
+  const newDonation: Donation = {
+    ...donation,
+    id: createId("donation"),
+    status: "Pending",
+    createdAt: new Date().toISOString()
+  };
+  project.donations = [newDonation, ...project.donations];
+  return newDonation;
+};
+
+export const createPayment = (reference: string, donationId: string) => {
+  payments[reference] = {
+    donationId,
+    status: "pending",
+    createdAt: new Date().toISOString()
+  };
+};
+
+export const getPaymentStatus = (reference: string) => payments[reference] ?? null;
+
+export const confirmPayment = (reference: string) => {
+  const payment = payments[reference];
+  if (!payment) return null;
+  if (payment.status === "confirmed") return payment;
+
+  const project = projects.find((item) =>
+    item.donations.some((donation) => donation.id === payment.donationId)
+  );
+  if (!project) return null;
+  project.donations = project.donations.map((donation) =>
+    donation.id === payment.donationId ? { ...donation, status: "Confirmed" } : donation
+  );
+  recalcBomFunded(project);
+  applyStatusRules(project);
+  payments[reference] = { ...payment, status: "confirmed" };
+  return payments[reference];
+};
+
 export const computeBomMetrics = (item: BomItem) => {
   if (item.type === "unit") {
     const fundedUnits = Math.min(item.qty ?? 0, Math.floor(item.fundedAmount / (item.unitPrice ?? 1)));
@@ -733,13 +911,7 @@ export const getTopBuilders = (project: Project) => {
     .slice(0, 5);
 };
 
-export const getTopBuildersGlobal = (limit = 10) => {
-  const allDonations = projects.flatMap((project) => project.donations);
-  return computeDonorTotals(allDonations)
-    .map((entry) => ({ donorId: entry.donorId, donorName: entry.donorName, total: entry.total }))
-    .sort((a, b) => b.total - a.total)
-    .slice(0, limit);
-};
+export const getTopBuildersGlobal = (limit = 10) => topBuildersSeed.slice(0, limit);
 
 export const getTopBuildersByProject = (projectId: string, limit = 10) => {
   const project = projects.find((item) => item.id === projectId);

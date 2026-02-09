@@ -1,0 +1,79 @@
+export type FundingStatus = "Pending" | "Approved" | "Rejected" | "Failed" | "Funded";
+export type CompletionStatus = "active" | "completed";
+export type OrgType = "Community" | "Business" | "Government";
+export type BomType = "unit" | "total" | "flex";
+export type ProjectType = "official" | "community" | "creator";
+export type CommunityCategory = "Personal" | "Mascotas" | "Escuela" | "Hogar" | "Transporte" | "Otro";
+
+export interface BomItem {
+  id: string;
+  name: string;
+  type: BomType;
+  qty?: number;
+  unitPrice?: number;
+  totalPrice?: number;
+  fundedAmount: number;
+  neededByWeek?: number;
+}
+
+export interface ProjectUpdate {
+  id: string;
+  date: string;
+  title: string;
+  description: string;
+  image: string;
+}
+
+export interface Donation {
+  id: string;
+  projectId: string;
+  itemId?: string;
+  donorId: string;
+  donorName: string;
+  amount: number;
+  status: "Pending" | "Confirmed" | "Refunded";
+  createdAt: string;
+  paymentMethod?: string;
+  reference?: string;
+}
+
+export interface Comment {
+  id: string;
+  projectId: string;
+  name: string;
+  text: string;
+  createdAt: string;
+}
+
+export interface Report {
+  id: string;
+  projectId: string;
+  reason?: string;
+  createdAt: string;
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  zone: string;
+  coverImage: string;
+  description: string;
+  organizer: string;
+  orgType: OrgType;
+  type: ProjectType;
+  verificationDoc?: string;
+  category?: CommunityCategory;
+  creatorName?: string;
+  creatorFollowers?: number;
+  creatorVideoLink?: string;
+  verified?: boolean;
+  goal: number;
+  createdAt: string;
+  durationDays: number;
+  fundingStatus: FundingStatus;
+  status: CompletionStatus;
+  bom: BomItem[];
+  updates: ProjectUpdate[];
+  donations: Donation[];
+  comments: Comment[];
+}

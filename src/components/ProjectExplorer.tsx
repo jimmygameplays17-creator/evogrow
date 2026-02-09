@@ -89,6 +89,7 @@ export function ProjectExplorer({ title, subtitle, typeFilter, infoText }: Proje
                   <option>Todos</option>
                   <option value="official">Oficial</option>
                   <option value="community">Comunidad</option>
+                  <option value="creator">Creadores</option>
                 </select>
               </div>
             )}

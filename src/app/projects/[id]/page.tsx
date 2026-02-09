@@ -5,6 +5,7 @@ import { Badge } from "@/components/Badge";
 import { ProgressBar } from "@/components/ProgressBar";
 import { ShareButton } from "@/components/ShareButton";
 import { Leaderboard } from "@/components/Leaderboard";
+import { CreatorBadge } from "@/components/CreatorBadge";
 import { computeProjectMetrics, getProjectById, getTopBuildersByProject } from "@/lib/data";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
@@ -18,6 +19,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
   const metrics = computeProjectMetrics(project);
   const isOfficial = project.type === "official";
+  const isCreator = project.type === "creator";
   const topBuilders = getTopBuildersByProject(project.id, 5);
 
   return (
@@ -25,7 +27,11 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
       <section
         className={[
           "overflow-hidden rounded-3xl shadow-card",
-          isOfficial ? "border border-blue-100 bg-blue-50/40" : "bg-white"
+          isCreator
+            ? "border border-amber-100 bg-amber-50/40"
+            : isOfficial
+              ? "border border-blue-100 bg-blue-50/40"
+              : "bg-white"
         ].join(" ")}
       >
         <div className="relative h-64 w-full">
@@ -34,7 +40,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         <div className="space-y-4 px-6 py-6">
           <div className="flex flex-wrap items-center gap-3 text-sm text-steel">
             <span className="font-semibold uppercase">{project.zone}</span>
-            {isOfficial && <Badge orgType={project.orgType} />}
+            {isCreator ? <CreatorBadge /> : isOfficial ? <Badge orgType={project.orgType} /> : null}
             <span>Organiza: {project.organizer}</span>
             {project.status !== "Approved" && (
               <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
@@ -52,7 +58,18 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             </div>
           </div>
           <p className="text-sm text-steel">{project.description}</p>
-          {!isOfficial && (
+          {isCreator && (
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+              <p className="font-semibold">Creator Verified: {project.creatorName}</p>
+              {project.creatorFollowers && <p>{project.creatorFollowers.toLocaleString("es-MX")} seguidores</p>}
+              {project.creatorVideoLink && (
+                <a href={project.creatorVideoLink} className="underline">
+                  Ver video
+                </a>
+              )}
+            </div>
+          )}
+          {!isOfficial && !isCreator && (
             <p className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
               Campaña creada por un usuario. Verifica antes de donar.
             </p>

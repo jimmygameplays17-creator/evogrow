@@ -8,6 +8,7 @@ const navItems = [
   { href: "/", label: "Explorar" },
   { href: "/officials", label: "Oficial" },
   { href: "/community", label: "Comunidad" },
+  { href: "/creators", label: "Creadores" },
   { href: "/create", label: "Proponer" },
   { href: "/admin", label: "Admin" },
   { href: "/builders", label: "Top Builders" }

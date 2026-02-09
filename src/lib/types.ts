@@ -1,7 +1,7 @@
 export type ProjectStatus = "Pending" | "Approved" | "Rejected" | "Failed" | "Funded";
 export type OrgType = "Community" | "Business" | "Government";
 export type BomType = "unit" | "total" | "flex";
-export type ProjectType = "official" | "community";
+export type ProjectType = "official" | "community" | "creator";
 export type CommunityCategory = "Personal" | "Mascotas" | "Escuela" | "Hogar" | "Transporte" | "Otro";
 
 export interface BomItem {
@@ -45,6 +45,10 @@ export interface Project {
   type: ProjectType;
   verificationDoc?: string;
   category?: CommunityCategory;
+  creatorName?: string;
+  creatorFollowers?: number;
+  creatorVideoLink?: string;
+  verified?: boolean;
   goal: number;
   createdAt: string;
   durationDays: number;

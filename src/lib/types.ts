@@ -25,6 +25,7 @@ export interface Donation {
   id: string;
   projectId: string;
   itemId?: string;
+  donorId: string;
   donorName: string;
   amount: number;
   status: "Confirmed" | "Refunded";

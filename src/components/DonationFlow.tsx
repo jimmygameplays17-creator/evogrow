@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { BomItem, Project } from "@/lib/types";
-import { computeBomMetrics } from "@/lib/data";
+import { computeBomMetrics, getCurrentUserId } from "@/lib/data";
 import { formatCurrency } from "@/lib/utils";
 import { ProgressBar } from "@/components/ProgressBar";
 
@@ -23,6 +23,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
   const [percent, setPercent] = useState(10);
   const [amount, setAmount] = useState(5000);
   const [donorName, setDonorName] = useState("Anónimo");
+  const [donorId] = useState(getCurrentUserId());
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const selectedItem = useMemo(
@@ -64,6 +65,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
       body: JSON.stringify({
         itemId: selectedItem?.id,
         amount: computedAmount,
+        donorId,
         donorName
       })
     });
@@ -260,7 +262,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold uppercase text-steel">Nombre</label>
+                  <label className="text-xs font-semibold uppercase text-steel">Nombre / Empresa</label>
                   <input
                     type="text"
                     value={donorName}

@@ -15,7 +15,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
   const donationResult = addDonation(params.id, {
     itemId: payload.itemId,
     amount: payload.amount,
-    donorName: payload.donorName
+    donorId: payload.donorId ?? "anonymous",
+    donorName: payload.donorName ?? "Anónimo"
   });
 
   if (!donationResult || ("error" in donationResult && donationResult.error === "ProjectClosed")) {

@@ -2,6 +2,8 @@ import { BomItem, Donation, OrgType, Project, ProjectStatus } from "@/lib/types"
 
 const zones = ["Fuentes de las Lomas", "Interlomas", "Naucalpan"];
 
+const currentUserId = "user_me";
+
 const seedProjects: Project[] = [
   {
     id: "p1",
@@ -82,6 +84,7 @@ const seedProjects: Project[] = [
         id: "d1",
         projectId: "p1",
         itemId: "b1",
+        donorId: "donor_grupo_ima",
         donorName: "María López",
         amount: 6000,
         status: "Confirmed",
@@ -91,8 +94,39 @@ const seedProjects: Project[] = [
         id: "d2",
         projectId: "p1",
         itemId: "b3",
+        donorId: "donor_erpp",
         donorName: "Fer Alvarez",
         amount: 12000,
+        status: "Confirmed",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString()
+      },
+      {
+        id: "d4",
+        projectId: "p1",
+        itemId: "b2",
+        donorId: "donor_grupo_ima",
+        donorName: "Grupo IMA",
+        amount: 60000,
+        status: "Confirmed",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString()
+      },
+      {
+        id: "d5",
+        projectId: "p1",
+        itemId: "b4",
+        donorId: "donor_erpp",
+        donorName: "ERPP",
+        amount: 25000,
+        status: "Confirmed",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString()
+      },
+      {
+        id: "d6",
+        projectId: "p1",
+        itemId: "b5",
+        donorId: currentUserId,
+        donorName: "Tu cuenta",
+        amount: 2600,
         status: "Confirmed",
         createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString()
       }
@@ -152,10 +186,41 @@ const seedProjects: Project[] = [
         id: "d3",
         projectId: "p2",
         itemId: "b6",
+        donorId: "donor_grupo_ima",
         donorName: "Constructora Vía",
         amount: 30000,
         status: "Confirmed",
         createdAt: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString()
+      },
+      {
+        id: "d7",
+        projectId: "p2",
+        itemId: "b7",
+        donorId: "donor_grupo_ima",
+        donorName: "Grupo IMA",
+        amount: 40000,
+        status: "Confirmed",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 18).toISOString()
+      },
+      {
+        id: "d8",
+        projectId: "p2",
+        itemId: "b8",
+        donorId: "donor_erpp",
+        donorName: "ERPP",
+        amount: 20000,
+        status: "Confirmed",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 16).toISOString()
+      },
+      {
+        id: "d9",
+        projectId: "p2",
+        itemId: "b7",
+        donorId: currentUserId,
+        donorName: "Tu cuenta",
+        amount: 2000,
+        status: "Confirmed",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString()
       }
     ]
   },
@@ -356,18 +421,54 @@ export const computeProjectMetrics = (project: Project) => {
   return { totalRaised, deadline, daysRemaining, progress };
 };
 
-export const getTopBuilders = (project: Project) => {
-  const totals: Record<string, number> = {};
-  project.donations
+const computeDonorTotals = (donations: Donation[]) => {
+  const totals: Record<string, { donorId: string; donorName: string; total: number }> = {};
+  donations
     .filter((donation) => donation.status === "Confirmed")
     .forEach((donation) => {
-      totals[donation.donorName] = (totals[donation.donorName] || 0) + donation.amount;
+      const key = donation.donorId;
+      if (!totals[key]) {
+        totals[key] = { donorId: donation.donorId, donorName: donation.donorName, total: 0 };
+      }
+      totals[key].total += donation.amount;
     });
-  return Object.entries(totals)
-    .map(([name, total]) => ({ name, total }))
+  return Object.values(totals);
+};
+
+export const getTopBuilders = (project: Project) => {
+  return computeDonorTotals(project.donations)
+    .map((entry) => ({ name: entry.donorName, total: entry.total }))
     .sort((a, b) => b.total - a.total)
     .slice(0, 5);
 };
+
+export const getTopBuildersGlobal = (limit = 10) => {
+  const allDonations = projects.flatMap((project) => project.donations);
+  return computeDonorTotals(allDonations)
+    .map((entry) => ({ donorId: entry.donorId, donorName: entry.donorName, total: entry.total }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, limit);
+};
+
+export const getTopBuildersByProject = (projectId: string, limit = 10) => {
+  const project = projects.find((item) => item.id === projectId);
+  if (!project) return [];
+  return computeDonorTotals(project.donations)
+    .map((entry) => ({ donorId: entry.donorId, donorName: entry.donorName, total: entry.total }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, limit);
+};
+
+export const getMyRankGlobal = (userId: string) => {
+  const leaderboard = getTopBuildersGlobal(100);
+  const index = leaderboard.findIndex((entry) => entry.donorId === userId);
+  if (index === -1) {
+    return { rank: null, total: 0 };
+  }
+  return { rank: index + 1, total: leaderboard[index].total };
+};
+
+export const getCurrentUserId = () => currentUserId;
 
 export const getBadgeLabel = (orgType: OrgType) => {
   if (orgType === "Community") return "Community";

@@ -4,7 +4,8 @@ import { DonationFlow } from "@/components/DonationFlow";
 import { Badge } from "@/components/Badge";
 import { ProgressBar } from "@/components/ProgressBar";
 import { ShareButton } from "@/components/ShareButton";
-import { computeProjectMetrics, getProjectById, getTopBuilders } from "@/lib/data";
+import { Leaderboard } from "@/components/Leaderboard";
+import { computeProjectMetrics, getProjectById, getTopBuildersByProject } from "@/lib/data";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 interface ProjectDetailPageProps {
@@ -16,7 +17,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   if (!project) return notFound();
 
   const metrics = computeProjectMetrics(project);
-  const topBuilders = getTopBuilders(project);
+  const topBuilders = getTopBuildersByProject(project.id, 5);
 
   return (
     <main className="mx-auto max-w-6xl px-6 pb-28 pt-10">
@@ -100,16 +101,10 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h3 className="text-base font-semibold text-ink">Top Builders</h3>
-            <ul className="mt-4 space-y-3 text-sm text-steel">
-              {topBuilders.map((builder) => (
-                <li key={builder.name} className="flex items-center justify-between">
-                  <span>{builder.name}</span>
-                  <span className="font-semibold text-ink">{formatCurrency(builder.total)}</span>
-                </li>
-              ))}
-              {topBuilders.length === 0 && <li>Sin ranking todavía.</li>}
-            </ul>
+            <h3 className="text-base font-semibold text-ink">Top Builders del proyecto</h3>
+            <div className="mt-4">
+              <Leaderboard entries={topBuilders} />
+            </div>
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">

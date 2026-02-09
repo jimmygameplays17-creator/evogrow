@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import classNames from "classnames";
+import { HeaderNav } from "@/components/HeaderNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,17 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="text-xl font-semibold text-ink">
               Civitas
             </Link>
-            <nav className="flex items-center gap-4 text-sm text-steel">
-              <Link href="/" className="hover:text-ink">
-                Explorar
-              </Link>
-              <Link href="/create" className="hover:text-ink">
-                Proponer
-              </Link>
-              <Link href="/admin" className="hover:text-ink">
-                Admin
-              </Link>
-            </nav>
+            <HeaderNav />
           </div>
         </div>
         {children}

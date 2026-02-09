@@ -1,14 +1,19 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { Project } from "@/lib/types";
 import { ProjectCard } from "@/components/ProjectCard";
+import { Leaderboard } from "@/components/Leaderboard";
 import { computeProjectMetrics } from "@/lib/data";
 
 const zones = ["Fuentes de las Lomas", "Interlomas", "Naucalpan"];
 
 export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [topBuilders, setTopBuilders] = useState<
+    { donorId: string; donorName: string; total: number }[]
+  >([]);
   const [zone, setZone] = useState("Todas");
   const [orgType, setOrgType] = useState("Todos");
   const [sortBy, setSortBy] = useState("urgentes");
@@ -23,6 +28,12 @@ export default function HomePage() {
       .then((res) => res.json())
       .then((data) => setProjects(data.projects));
   }, [zone, orgType]);
+
+  useEffect(() => {
+    fetch("/api/builders")
+      .then((res) => res.json())
+      .then((data) => setTopBuilders(data.leaderboard ?? []));
+  }, []);
 
   const sortedProjects = useMemo(() => {
     const copy = [...projects];
@@ -96,6 +107,21 @@ export default function HomePage() {
             No hay proyectos disponibles con estos filtros.
           </div>
         )}
+      </section>
+
+      <section className="mt-12 rounded-3xl bg-white p-6 shadow-card">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-ink">Top Builders</h2>
+            <p className="text-sm text-steel">Ranking rápido de los builders más activos.</p>
+          </div>
+          <Link href="/builders" className="text-sm font-semibold text-ink">
+            Ver todos
+          </Link>
+        </div>
+        <div className="mt-4">
+          <Leaderboard entries={topBuilders.slice(0, 3)} highlightTop={false} />
+        </div>
       </section>
     </main>
   );

@@ -62,7 +62,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
       setRecentIds(next);
     }
     onClose();
-    router.push(`/projects/${project.id}`);
+    router.push(`/p/${project.slug ?? project.id}`);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -82,11 +82,11 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 p-6 backdrop-blur"
+      className="fixed inset-0 z-[70] flex items-start justify-center bg-slate-950/70 p-4 pt-24 backdrop-blur sm:p-6 sm:pt-24"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-3xl rounded-3xl border border-white/10 bg-card p-6 shadow-2xl"
+        className="w-full max-w-4xl rounded-3xl border border-white/10 bg-card p-5 shadow-2xl sm:p-6"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-center justify-between gap-4">

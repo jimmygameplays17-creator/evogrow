@@ -54,6 +54,7 @@ export interface Report {
 
 export interface Project {
   id: string;
+  slug?: string;
   title: string;
   zone: string;
   coverImage: string;
@@ -67,6 +68,17 @@ export interface Project {
   verificationDoc?: string;
   category?: CommunityCategory;
   creatorName?: string;
+  creatorHandle?: string;
+  creatorPlatform?: "twitch" | "youtube" | "tiktok";
+  creatorAvatarUrl?: string;
+  creatorBannerUrl?: string;
+  creatorVerified?: boolean;
+  isLive?: boolean;
+  livePlatform?: "twitch" | "youtube" | "kick" | "tiktok" | "x" | "instagram" | "other";
+  liveUrl?: string;
+  lastLiveAt?: string;
+  pinnedInLive?: boolean;
+  ownerHandle?: string;
   creatorFollowers?: number;
   creatorVideoLink?: string;
   verified?: boolean;
@@ -79,4 +91,11 @@ export interface Project {
   updates: ProjectUpdate[];
   donations: Donation[];
   comments: Comment[];
+}
+
+export interface FundraUser {
+  handle: string;
+  displayName: string;
+  bio?: string;
+  avatarUrl?: string;
 }

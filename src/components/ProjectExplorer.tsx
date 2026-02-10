@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { CompletionStatus, Project, ProjectType } from "@/lib/types";
 import { ProjectCard } from "@/components/ProjectCard";
-import { Leaderboard } from "@/components/Leaderboard";
 import { computeProjectMetrics } from "@/lib/data";
 import { TagPills } from "@/components/TagPills";
 
@@ -15,10 +14,10 @@ interface ProjectExplorerProps {
   title: string;
   subtitle: string;
   typeFilter?: ProjectType;
+  creatorVerifiedOnly?: boolean;
   completionFilter?: CompletionStatus;
   tagFilter?: string;
   infoText?: string;
-  showTopBuildersPreview?: boolean;
   showTrending?: boolean;
 }
 
@@ -26,16 +25,13 @@ export function ProjectExplorer({
   title,
   subtitle,
   typeFilter,
+  creatorVerifiedOnly = false,
   completionFilter,
   tagFilter,
   infoText,
-  showTopBuildersPreview = true,
   showTrending = false
 }: ProjectExplorerProps) {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [topBuilders, setTopBuilders] = useState<
-    { donorId: string; donorName: string; total: number }[]
-  >([]);
   const [zone, setZone] = useState("Todas");
   const [projectType, setProjectType] = useState("Todos");
   const [completionStatus, setCompletionStatus] = useState("Todos");
@@ -55,15 +51,11 @@ export function ProjectExplorer({
       .then((data) => setProjects(data.projects));
   }, [zone, projectType, typeFilter, completionStatus, completionFilter]);
 
-  useEffect(() => {
-    if (!showTopBuildersPreview) return;
-    fetch("/api/builders")
-      .then((res) => res.json())
-      .then((data) => setTopBuilders(data.leaderboard ?? []));
-  }, [showTopBuildersPreview]);
-
   const sortedProjects = useMemo(() => {
-    const filtered = tagFilter ? projects.filter((project) => project.tags.includes(tagFilter)) : projects;
+    const byTag = tagFilter ? projects.filter((project) => project.tags.includes(tagFilter)) : projects;
+    const filtered = creatorVerifiedOnly
+      ? byTag.filter((project) => project.creatorVerified || project.type === "creator")
+      : byTag;
     const copy = [...filtered];
     if (sortBy === "urgentes") {
       return copy.sort(
@@ -71,7 +63,7 @@ export function ProjectExplorer({
       );
     }
     return copy.sort((a, b) => a.title.localeCompare(b.title));
-  }, [projects, sortBy, tagFilter]);
+  }, [projects, sortBy, tagFilter, creatorVerifiedOnly]);
 
   const trendingProjects = useMemo(() => {
     return [...projects].sort((a, b) => b.trendScore - a.trendScore).slice(0, 6);
@@ -158,7 +150,7 @@ export function ProjectExplorer({
             {trendingProjects.map((project) => (
               <Link
                 key={project.id}
-                href={`/projects/${project.id}`}
+                href={`/p/${project.slug ?? project.id}`}
                 className="min-w-[240px] flex-1 rounded-3xl border border-white/10 bg-white/5 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="relative h-32 w-full overflow-hidden rounded-t-3xl">
@@ -188,23 +180,6 @@ export function ProjectExplorer({
           </div>
         )}
       </section>
-
-      {showTopBuildersPreview && (
-        <section className="mt-12 rounded-3xl border border-white/10 bg-card p-6 shadow-card">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-white">Top Builders</h2>
-              <p className="text-sm text-slate-400">Ranking rápido de los builders más activos.</p>
-            </div>
-            <Link href="/builders" className="text-sm font-semibold text-money hover:text-accent transition">
-              Ver todos
-            </Link>
-          </div>
-          <div className="mt-4">
-            <Leaderboard entries={topBuilders.slice(0, 3)} highlightTop={false} />
-          </div>
-        </section>
-      )}
     </main>
   );
 }

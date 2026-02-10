@@ -3,6 +3,7 @@ import {
   Comment,
   CompletionStatus,
   Donation,
+  FundraUser,
   FundingStatus,
   OrgType,
   Project,
@@ -13,6 +14,15 @@ import {
 const zones = ["Fuentes de las Lomas", "Interlomas", "Naucalpan"];
 
 const currentUserId = "user_me";
+
+const slugify = (input: string) =>
+  input
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    .slice(0, 64);
 
 const seedProjects: Project[] = [
   {
@@ -462,21 +472,31 @@ const seedProjects: Project[] = [
   },
   {
     id: "p10",
-    title: "Reto solidario para refugio de animales",
+    title: "500,000 USD para iPads para niños",
     zone: "Fuentes de las Lomas",
-    coverImage: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1200&q=80",
-    description: "Reto de donación con mi comunidad para apoyar al refugio local.",
+    coverImage: "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Escuelas públicas y zonas vulnerables: recaudación global para entregar iPads y conectividad educativa.",
     organizer: "Equipo Creator",
     orgType: "Business",
     type: "creator",
-    tags: ["Creador", "Verified", "Tendencia"],
-    trendScore: 90,
-    donationsLast24h: 11,
-    creatorName: "Luna Torres",
-    creatorFollowers: 240000,
-    creatorVideoLink: "https://example.com/video/luna-reto",
+    tags: ["Creador", "Verified", "Tendencia", "Live"],
+    trendScore: 97,
+    donationsLast24h: 41,
+    creatorName: "MrBeast",
+    creatorHandle: "@mrbeast",
+    creatorPlatform: "youtube",
+    creatorAvatarUrl: "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=300&q=80",
+    creatorBannerUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80",
+    creatorFollowers: 290000000,
+    creatorVideoLink: "https://example.com/video/mrbeast-ipads",
+    creatorVerified: true,
+    ownerHandle: "mrbeast",
+    isLive: false,
+    livePlatform: "youtube",
+    liveUrl: "https://www.youtube.com/@mrbeast/live",
     verified: true,
-    goal: 100000,
+    goal: 500000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
     durationDays: 20,
     fundingStatus: "Approved",
@@ -488,21 +508,33 @@ const seedProjects: Project[] = [
   },
   {
     id: "p11",
-    title: "Entradas para seguidores",
+    title: "250,000 USD para 10,000 cobijas y kits de invierno",
     zone: "Interlomas",
-    coverImage: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-    description: "Quiero apoyar entradas solidarias y sumar donaciones con mis seguidores.",
+    coverImage: "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Campaña LIVE para entregar cobijas, termos y kits de invierno a personas en situación de calle.",
     organizer: "Equipo Creator",
     orgType: "Business",
     type: "creator",
-    tags: ["Creador", "Verified"],
-    trendScore: 60,
-    donationsLast24h: 6,
-    creatorName: "Diego Play",
-    creatorFollowers: 180000,
-    creatorVideoLink: "https://example.com/video/diego-entradas",
+    tags: ["Creador", "Verified", "Tendencia", "Live"],
+    trendScore: 92,
+    donationsLast24h: 33,
+    creatorName: "IShowSpeed",
+    creatorHandle: "@ishowspeed",
+    creatorPlatform: "youtube",
+    creatorAvatarUrl: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80",
+    creatorBannerUrl: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=1200&q=80",
+    creatorFollowers: 34000000,
+    creatorVideoLink: "https://example.com/video/speed-cobijas",
+    creatorVerified: true,
+    ownerHandle: "ishowspeed",
+    isLive: true,
+    livePlatform: "youtube",
+    liveUrl: "https://www.youtube.com/@IShowSpeed/live",
+    lastLiveAt: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
+    pinnedInLive: true,
     verified: true,
-    goal: 80000,
+    goal: 250000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
     durationDays: 18,
     fundingStatus: "Approved",
@@ -514,21 +546,105 @@ const seedProjects: Project[] = [
   },
   {
     id: "p12",
-    title: "Regalos de Navidad",
+    title: "150,000 USD para útiles + becas de escuela",
     zone: "Naucalpan",
-    coverImage: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?auto=format&fit=crop&w=1200&q=80",
-    description: "Campaña para comprar regalos y alimentos para familias en Navidad.",
+    coverImage: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Con mi comunidad vamos a financiar útiles y becas para estudiantes de secundaria y preparatoria.",
     organizer: "Equipo Creator",
     orgType: "Business",
     type: "creator",
-    tags: ["Creador", "Verified", "Nuevo"],
-    trendScore: 55,
-    donationsLast24h: 5,
-    creatorName: "Marina Vlogs",
-    creatorFollowers: 320000,
-    creatorVideoLink: "https://example.com/video/marina-navidad",
+    tags: ["Creador", "Verified", "Nuevo", "Live"],
+    trendScore: 85,
+    donationsLast24h: 24,
+    creatorName: "Westcol",
+    creatorHandle: "@westcol",
+    creatorPlatform: "twitch",
+    creatorAvatarUrl: "https://images.unsplash.com/photo-1552058544-f2b08422138a?auto=format&fit=crop&w=300&q=80",
+    creatorBannerUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80",
+    creatorFollowers: 7600000,
+    creatorVideoLink: "https://example.com/video/westcol-becas",
+    creatorVerified: true,
+    ownerHandle: "westcol",
+    isLive: true,
+    livePlatform: "twitch",
+    liveUrl: "https://www.twitch.tv/westcol",
+    lastLiveAt: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
+    pinnedInLive: true,
     verified: true,
-    goal: 60000,
+    goal: 150000,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+    durationDays: 22,
+    fundingStatus: "Approved",
+    status: "active",
+    bom: [],
+    updates: [],
+    donations: [],
+    comments: []
+  },
+  {
+    id: "p13",
+    title: "120,000 USD para refugio de animales (comida + veterinario)",
+    zone: "Interlomas",
+    coverImage: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Recaudación para alimento, vacunación y atención veterinaria en un refugio con rescates urgentes.",
+    organizer: "Equipo Creator",
+    orgType: "Business",
+    type: "creator",
+    tags: ["Creador", "Verified", "Tendencia", "Live"],
+    trendScore: 82,
+    donationsLast24h: 19,
+    creatorName: "Shifu",
+    creatorHandle: "@shifu",
+    creatorPlatform: "tiktok",
+    creatorAvatarUrl: "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=300&q=80",
+    creatorBannerUrl: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1200&q=80",
+    creatorFollowers: 2900000,
+    creatorVideoLink: "https://example.com/video/shifu-refugio",
+    creatorVerified: true,
+    ownerHandle: "shifu",
+    isLive: false,
+    livePlatform: "tiktok",
+    liveUrl: "https://www.tiktok.com/@shifu/live",
+    verified: true,
+    goal: 120000,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
+    durationDays: 21,
+    fundingStatus: "Approved",
+    status: "active",
+    bom: [],
+    updates: [],
+    donations: [],
+    comments: []
+  },
+  {
+    id: "p14",
+    title: "200,000 USD para canchas comunitarias",
+    zone: "Naucalpan",
+    coverImage: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "(Extra demo) Renovación de canchas y luminarias para torneos juveniles en colonias populares.",
+    organizer: "Equipo Creator",
+    orgType: "Business",
+    type: "creator",
+    tags: ["Creador", "Verified", "Live"],
+    trendScore: 78,
+    donationsLast24h: 14,
+    creatorName: "Kai Cenat",
+    creatorHandle: "@kaicenat",
+    creatorPlatform: "twitch",
+    creatorAvatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
+    creatorBannerUrl: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1200&q=80",
+    creatorFollowers: 13000000,
+    creatorVideoLink: "https://example.com/video/kai-canchas",
+    creatorVerified: true,
+    ownerHandle: "kaicenat",
+    isLive: false,
+    livePlatform: "twitch",
+    liveUrl: "https://www.twitch.tv/kaicenat",
+    verified: true,
+    goal: 200000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
     durationDays: 22,
     fundingStatus: "Approved",
@@ -540,7 +656,55 @@ const seedProjects: Project[] = [
   }
 ];
 
-let projects = seedProjects;
+const seedUsers: FundraUser[] = [
+  {
+    handle: "mrbeast",
+    displayName: "MrBeast",
+    bio: "Creator Verified · Retos globales para causas sociales.",
+    avatarUrl: "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=320&q=80"
+  },
+  {
+    handle: "ishowspeed",
+    displayName: "IShowSpeed",
+    bio: "LIVE fundraising para ayudar rápido y en grande.",
+    avatarUrl: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=320&q=80"
+  },
+  {
+    handle: "westcol",
+    displayName: "Westcol",
+    bio: "Comunidad creator enfocada en becas y educación.",
+    avatarUrl: "https://images.unsplash.com/photo-1552058544-f2b08422138a?auto=format&fit=crop&w=320&q=80"
+  },
+  {
+    handle: "shifu",
+    displayName: "Shifu",
+    bio: "Stream solidario para causas de bienestar animal.",
+    avatarUrl: "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=320&q=80"
+  },
+  {
+    handle: "jaime",
+    displayName: "Jaime",
+    bio: "Comparte tu link de Fundra en chat y recibe aportes en segundos.",
+    avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=320&q=80"
+  }
+];
+
+const ensureProjectSlugs = (items: Project[]) => {
+  const used = new Set<string>();
+  return items.map((project) => {
+    const base = project.slug ? slugify(project.slug) : slugify(project.title);
+    let candidate = base || `project-${project.id}`;
+    let i = 2;
+    while (used.has(candidate)) {
+      candidate = `${base}-${i}`;
+      i += 1;
+    }
+    used.add(candidate);
+    return { ...project, slug: candidate, ownerHandle: project.ownerHandle ?? undefined };
+  });
+};
+
+let projects = ensureProjectSlugs(seedProjects);
 let reports: Report[] = [];
 let topBuildersSeed: { donorId: string; donorName: string; total: number }[] = [];
 let payments: Record<string, { donationId: string; status: "pending" | "confirmed"; createdAt: string }> = {};
@@ -760,6 +924,22 @@ export const getProjectById = (id: string) => {
   return project ? normalizeProject(project) : null;
 };
 
+export const getProjectBySlug = (slug: string) => {
+  const project = projects.find((item) => item.slug === slug);
+  return project ? normalizeProject(project) : null;
+};
+
+export const getProjectSharePath = (project: Project) => `/p/${project.slug ?? slugify(project.title)}`;
+
+export const getUserByHandle = (handle: string) =>
+  seedUsers.find((user) => user.handle.toLowerCase() === handle.toLowerCase()) ?? null;
+
+export const getProjectsByHandle = (handle: string) =>
+  projects
+    .map(normalizeProject)
+    .filter((project) => (project.ownerHandle ?? project.creatorHandle?.replace(/^@/, "")) === handle)
+    .sort((a, b) => b.trendScore - a.trendScore);
+
 export const createProject = (
   payload: Omit<
     Project,
@@ -784,6 +964,7 @@ export const createProject = (
   const newProject: Project = {
     ...payload,
     id: createId("project"),
+    slug: slugify(payload.title),
     tags: defaultTags,
     trendScore: 0,
     donationsLast24h: 0,

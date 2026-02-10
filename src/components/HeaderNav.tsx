@@ -35,7 +35,7 @@ export function HeaderNav() {
   };
 
   return (
-    <nav className="flex items-center gap-4 text-sm text-slate-200">
+    <nav className="flex min-w-max items-center gap-5 whitespace-nowrap text-sm text-slate-200">
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         return (

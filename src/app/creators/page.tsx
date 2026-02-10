@@ -6,7 +6,8 @@ export default function CreatorsPage() {
       title="Creadores"
       subtitle="Creadores"
       typeFilter="creator"
-      infoText="Proyectos creados por influencers verificados que donan a su comunidad."
+      creatorVerifiedOnly
+      infoText="Proyectos Creator Verified impulsados por streamers e influencers para causas comunitarias globales."
     />
   );
 }

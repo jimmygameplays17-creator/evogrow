@@ -9,7 +9,7 @@ import { HeaderBar } from "@/components/HeaderBar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Civitas | Crowdfunding local",
+  title: "Fundra | Crowdfunding local",
   description: "Financia piezas reales para obras comunitarias con transparencia de costos."
 };
 

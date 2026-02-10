@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     recipient,
     amount: amountCrypto,
     reference,
-    label: `Civitas · ${project.title}`,
+    label: `Fundra · ${project.title}`,
     message: "Pago demo en Solana devnet"
   });
 

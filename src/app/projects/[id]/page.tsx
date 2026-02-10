@@ -8,6 +8,7 @@ import { ShareActions } from "@/components/ShareActions";
 import { ReportButton } from "@/components/ReportButton";
 import { Leaderboard } from "@/components/Leaderboard";
 import { CreatorBadge } from "@/components/CreatorBadge";
+import { TagPills } from "@/components/TagPills";
 import { computeProjectMetrics, getProjectById, getTopBuildersByProject } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 import { Money } from "@/components/Money";
@@ -57,6 +58,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             )}
           </div>
           <h1 className="text-3xl font-semibold text-white">{project.title}</h1>
+          <TagPills tags={project.tags} />
           <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
             <ProgressBar value={metrics.progress} />
             <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-400">

@@ -74,7 +74,7 @@ export function AuthModal({ forceOpen = false }: AuthModalProps) {
         <div className="space-y-5 px-6 py-6 text-slate-100">
           <button
             onClick={handleGoogleLogin}
-            className="w-full rounded-full bg-money px-4 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-accent hover:shadow-lg"
+            className="w-full rounded-full bg-money px-4 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-accent hover:shadow-lg active:scale-95"
           >
             Continue with Google
           </button>
@@ -95,7 +95,7 @@ export function AuthModal({ forceOpen = false }: AuthModalProps) {
             />
             <button
               onClick={handleEmailLogin}
-              className="w-full rounded-full border border-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-accent hover:text-accent hover:bg-white/5"
+              className="w-full rounded-full border border-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-accent hover:text-accent hover:bg-white/5 active:scale-95"
             >
               Continue
             </button>

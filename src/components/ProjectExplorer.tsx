@@ -2,10 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { CompletionStatus, Project, ProjectType } from "@/lib/types";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Leaderboard } from "@/components/Leaderboard";
 import { computeProjectMetrics } from "@/lib/data";
+import { TagPills } from "@/components/TagPills";
 
 const zones = ["Fuentes de las Lomas", "Interlomas", "Naucalpan"];
 
@@ -16,6 +18,7 @@ interface ProjectExplorerProps {
   completionFilter?: CompletionStatus;
   infoText?: string;
   showTopBuildersPreview?: boolean;
+  showTrending?: boolean;
 }
 
 export function ProjectExplorer({
@@ -24,7 +27,8 @@ export function ProjectExplorer({
   typeFilter,
   completionFilter,
   infoText,
-  showTopBuildersPreview = true
+  showTopBuildersPreview = true,
+  showTrending = false
 }: ProjectExplorerProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [topBuilders, setTopBuilders] = useState<
@@ -65,6 +69,10 @@ export function ProjectExplorer({
     }
     return copy.sort((a, b) => a.title.localeCompare(b.title));
   }, [projects, sortBy]);
+
+  const trendingProjects = useMemo(() => {
+    return [...projects].sort((a, b) => b.trendScore - a.trendScore).slice(0, 6);
+  }, [projects]);
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
@@ -134,6 +142,38 @@ export function ProjectExplorer({
           </div>
         </div>
       </section>
+
+      {showTrending && (
+        <section className="mt-10 rounded-3xl border border-white/10 bg-card p-6 shadow-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-white">Trending hoy</h2>
+              <p className="text-sm text-slate-400">Los proyectos con mayor impulso en las últimas horas.</p>
+            </div>
+          </div>
+          <div className="mt-5 flex gap-4 overflow-x-auto pb-2">
+            {trendingProjects.map((project) => (
+              <Link
+                key={project.id}
+                href={`/projects/${project.id}`}
+                className="min-w-[240px] flex-1 rounded-3xl border border-white/10 bg-white/5 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="relative h-32 w-full overflow-hidden rounded-t-3xl">
+                  <Image src={project.coverImage} alt={project.title} fill className="object-cover" />
+                </div>
+                <div className="space-y-2 px-4 py-4">
+                  <TagPills tags={project.tags} maxVisible={2} />
+                  <h3 className="text-base font-semibold text-white">{project.title}</h3>
+                  <p className="text-xs text-slate-400">{project.zone}</p>
+                  <p className="text-xs text-money">
+                    {project.donationsLast24h} aportes · score {project.trendScore}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {sortedProjects.map((project) => (

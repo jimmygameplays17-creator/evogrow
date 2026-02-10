@@ -19,14 +19,14 @@ export function AdminActions({ projectId }: { projectId: string }) {
       <button
         onClick={() => updateStatus("approve")}
         disabled={loading}
-        className="rounded-full bg-money px-4 py-2 text-xs font-semibold text-slate-900 transition hover:bg-accent"
+        className="rounded-full bg-money px-4 py-2 text-xs font-semibold text-slate-900 transition hover:bg-accent hover:shadow-[0_0_12px_rgba(0,255,163,0.35)] active:scale-95"
       >
         Approve
       </button>
       <button
         onClick={() => updateStatus("reject")}
         disabled={loading}
-        className="rounded-full border border-white/10 px-4 py-2 text-xs font-semibold text-slate-200 transition hover:border-ember hover:text-ember"
+        className="rounded-full border border-white/10 px-4 py-2 text-xs font-semibold text-slate-200 transition hover:border-ember hover:text-ember active:scale-95"
       >
         Reject
       </button>

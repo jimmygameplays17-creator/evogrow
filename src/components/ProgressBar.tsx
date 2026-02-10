@@ -4,7 +4,7 @@ export function ProgressBar({ value, tone = "pine" }: { value: number; tone?: "o
   return (
     <div className="h-2 w-full rounded-full bg-white/10">
       <div
-        className={classNames("h-2 rounded-full transition-all", {
+        className={classNames("h-2 rounded-full transition-all duration-700", {
           "bg-accent": tone === "ocean",
           "bg-money": tone === "pine",
           "bg-ember": tone === "ember"

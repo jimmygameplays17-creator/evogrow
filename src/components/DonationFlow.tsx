@@ -225,14 +225,14 @@ export function DonationFlow({ project }: DonationFlowProps) {
             <button
               onClick={() => openFlow()}
               disabled={isClosed}
-              className="rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent disabled:opacity-40"
+              className="rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent active:scale-95 disabled:opacity-40"
             >
               Donar
             </button>
             <button
               onClick={() => openFlow(selectedItem, "unit")}
               disabled={isClosed}
-              className="rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent disabled:opacity-40"
+              className="rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent hover:shadow-[0_0_12px_rgba(0,255,163,0.35)] active:scale-95 disabled:opacity-40"
             >
               Financiar una pieza
             </button>
@@ -331,7 +331,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
 
                 <button
                   onClick={() => setStep(2)}
-                  className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
+                  className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent hover:shadow-[0_0_12px_rgba(0,255,163,0.35)] active:scale-95"
                 >
                   Continuar
                 </button>
@@ -396,13 +396,13 @@ export function DonationFlow({ project }: DonationFlowProps) {
 
                 <button
                   onClick={() => setStep(3)}
-                  className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
+                  className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent hover:shadow-[0_0_12px_rgba(0,255,163,0.35)] active:scale-95"
                 >
                   Continuar
                 </button>
                 <button
                   onClick={() => setStep(1)}
-                  className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
+                  className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent active:scale-95"
                 >
                   Volver
                 </button>
@@ -429,7 +429,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
                     <p className="text-sm text-slate-400">Demo: integración de pago en camino.</p>
                     <button
                       onClick={handleFiatPayment}
-                      className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
+                      className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent hover:shadow-[0_0_12px_rgba(0,255,163,0.35)] active:scale-95"
                     >
                       Simular pago
                     </button>
@@ -464,7 +464,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
                     )}
                     <button
                       onClick={checkSolanaStatus}
-                      className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
+                      className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent hover:shadow-[0_0_12px_rgba(0,255,163,0.35)] active:scale-95"
                     >
                       Verificar pago
                     </button>
@@ -474,7 +474,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
 
                 <button
                   onClick={() => setStep(2)}
-                  className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
+                  className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent active:scale-95"
                 >
                   Volver
                 </button>
@@ -490,7 +490,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
                 <p className="text-sm text-slate-400">Medalla obtenida: {badgeLabel}</p>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="mt-2 w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
+                  className="mt-2 w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent hover:shadow-[0_0_12px_rgba(0,255,163,0.35)] active:scale-95"
                 >
                   Cerrar
                 </button>

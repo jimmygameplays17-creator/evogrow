@@ -6,6 +6,7 @@ import classNames from "classnames";
 import { HeaderNav } from "@/components/HeaderNav";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
 import { AuthGate } from "@/components/AuthGate";
+import { NotificationBell } from "@/components/NotificationBell";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="text-xl font-semibold text-white">
               Civitas
             </Link>
-            <HeaderNav />
+            <div className="flex items-center gap-4">
+              <HeaderNav />
+              <NotificationBell />
+            </div>
           </div>
         </div>
         <CurrencyProvider>

@@ -61,6 +61,9 @@ export interface Project {
   organizer: string;
   orgType: OrgType;
   type: ProjectType;
+  tags: string[];
+  trendScore: number;
+  donationsLast24h: number;
   verificationDoc?: string;
   category?: CommunityCategory;
   creatorName?: string;

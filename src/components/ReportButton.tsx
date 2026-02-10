@@ -22,7 +22,7 @@ export function ReportButton({ projectId }: { projectId: string }) {
     <div>
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
+        className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent active:scale-95"
       >
         Reportar
       </button>
@@ -48,7 +48,7 @@ export function ReportButton({ projectId }: { projectId: string }) {
               </button>
               <button
                 onClick={submitReport}
-                className="rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
+                className="rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent hover:shadow-[0_0_12px_rgba(0,255,163,0.35)] active:scale-95"
               >
                 Enviar
               </button>

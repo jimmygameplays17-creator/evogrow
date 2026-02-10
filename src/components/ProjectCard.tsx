@@ -6,6 +6,7 @@ import { Money } from "@/components/Money";
 import { ProgressBar } from "@/components/ProgressBar";
 import { Badge } from "@/components/Badge";
 import { CreatorBadge } from "@/components/CreatorBadge";
+import { TagPills } from "@/components/TagPills";
 
 export function ProjectCard({ project }: { project: Project }) {
   const metrics = computeProjectMetrics(project);
@@ -15,7 +16,7 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <div
       className={[
-        "flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-card shadow-card"
+        "flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-card shadow-card transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(0,255,163,0.35)]"
       ].join(" ")}
     >
       <div className="relative h-44 w-full">
@@ -33,6 +34,7 @@ export function ProjectCard({ project }: { project: Project }) {
             {isCreator ? <CreatorBadge /> : isOfficial ? <Badge orgType={project.orgType} /> : null}
           </div>
         </div>
+        <TagPills tags={project.tags} />
         <h3 className="text-lg font-semibold text-white">{project.title}</h3>
         <div className="space-y-2">
           <ProgressBar value={metrics.progress} />
@@ -51,7 +53,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
         <Link
           href={`/projects/${project.id}`}
-          className="mt-auto inline-flex items-center justify-center rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
+          className="mt-auto inline-flex items-center justify-center rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent hover:shadow-[0_0_12px_rgba(0,255,163,0.35)] active:scale-95"
         >
           Ver proyecto
         </Link>

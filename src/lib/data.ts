@@ -25,6 +25,9 @@ const seedProjects: Project[] = [
     organizer: "Municipio de Huixquilucan",
     orgType: "Government",
     type: "official",
+    tags: ["Oficial", "Verified", "Tendencia"],
+    trendScore: 95,
+    donationsLast24h: 12,
     verificationDoc: "Oficio MUNI-2024-089",
     goal: 280000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 8).toISOString(),
@@ -171,6 +174,9 @@ const seedProjects: Project[] = [
     organizer: "Obras Naucalpan",
     orgType: "Government",
     type: "official",
+    tags: ["Oficial", "Verified"],
+    trendScore: 70,
+    donationsLast24h: 8,
     verificationDoc: "Dictamen 2024-INFRA-33",
     goal: 180000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
@@ -275,6 +281,9 @@ const seedProjects: Project[] = [
     organizer: "Empresa VerdeMX",
     orgType: "Business",
     type: "official",
+    tags: ["Oficial", "Verified", "Nuevo"],
+    trendScore: 40,
+    donationsLast24h: 2,
     verificationDoc: "Registro CSR-VERDEMX-2024",
     goal: 320000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
@@ -322,6 +331,9 @@ const seedProjects: Project[] = [
     organizer: "Laura R.",
     orgType: "Community",
     type: "community",
+    tags: ["Nuevo", "Tendencia"],
+    trendScore: 65,
+    donationsLast24h: 9,
     category: "Mascotas",
     goal: 50000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 4).toISOString(),
@@ -342,6 +354,9 @@ const seedProjects: Project[] = [
     organizer: "Eduardo M.",
     orgType: "Community",
     type: "community",
+    tags: ["Nuevo"],
+    trendScore: 50,
+    donationsLast24h: 4,
     category: "Escuela",
     goal: 12000,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 6).toISOString(),
@@ -362,6 +377,9 @@ const seedProjects: Project[] = [
     organizer: "Sofi G.",
     orgType: "Community",
     type: "community",
+    tags: ["Nuevo"],
+    trendScore: 45,
+    donationsLast24h: 3,
     category: "Hogar",
     goal: 8500,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
@@ -382,6 +400,9 @@ const seedProjects: Project[] = [
     organizer: "Carlos T.",
     orgType: "Community",
     type: "community",
+    tags: ["Tendencia", "Últimos días"],
+    trendScore: 80,
+    donationsLast24h: 10,
     category: "Transporte",
     goal: 1200,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
@@ -402,6 +423,9 @@ const seedProjects: Project[] = [
     organizer: "Daniela P.",
     orgType: "Community",
     type: "community",
+    tags: ["Nuevo"],
+    trendScore: 30,
+    donationsLast24h: 2,
     category: "Escuela",
     goal: 900,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString(),
@@ -422,6 +446,9 @@ const seedProjects: Project[] = [
     organizer: "Mike",
     orgType: "Community",
     type: "community",
+    tags: ["Últimos días"],
+    trendScore: 25,
+    donationsLast24h: 1,
     category: "Personal",
     goal: 500,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
@@ -442,6 +469,9 @@ const seedProjects: Project[] = [
     organizer: "Equipo Creator",
     orgType: "Business",
     type: "creator",
+    tags: ["Creador", "Verified", "Tendencia"],
+    trendScore: 90,
+    donationsLast24h: 11,
     creatorName: "Luna Torres",
     creatorFollowers: 240000,
     creatorVideoLink: "https://example.com/video/luna-reto",
@@ -465,6 +495,9 @@ const seedProjects: Project[] = [
     organizer: "Equipo Creator",
     orgType: "Business",
     type: "creator",
+    tags: ["Creador", "Verified"],
+    trendScore: 60,
+    donationsLast24h: 6,
     creatorName: "Diego Play",
     creatorFollowers: 180000,
     creatorVideoLink: "https://example.com/video/diego-entradas",
@@ -488,6 +521,9 @@ const seedProjects: Project[] = [
     organizer: "Equipo Creator",
     orgType: "Business",
     type: "creator",
+    tags: ["Creador", "Verified", "Nuevo"],
+    trendScore: 55,
+    donationsLast24h: 5,
     creatorName: "Marina Vlogs",
     creatorFollowers: 320000,
     creatorVideoLink: "https://example.com/video/marina-navidad",
@@ -725,11 +761,32 @@ export const getProjectById = (id: string) => {
 };
 
 export const createProject = (
-  payload: Omit<Project, "id" | "fundingStatus" | "status" | "createdAt" | "donations" | "updates" | "comments">
+  payload: Omit<
+    Project,
+    | "id"
+    | "fundingStatus"
+    | "status"
+    | "createdAt"
+    | "donations"
+    | "updates"
+    | "comments"
+    | "tags"
+    | "trendScore"
+    | "donationsLast24h"
+  >
 ) => {
+  const defaultTags =
+    payload.type === "official"
+      ? ["Oficial", "Verified"]
+      : payload.type === "creator"
+        ? ["Creador", "Verified"]
+        : ["Nuevo"];
   const newProject: Project = {
     ...payload,
     id: createId("project"),
+    tags: defaultTags,
+    trendScore: 0,
+    donationsLast24h: 0,
     fundingStatus: "Pending",
     status: "active",
     createdAt: new Date().toISOString(),

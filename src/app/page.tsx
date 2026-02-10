@@ -6,6 +6,7 @@ export default function HomePage() {
       title="Crowdfunding local con transparencia total"
       subtitle="Explora proyectos cercanos"
       showTopBuildersPreview={false}
+      showTrending
     />
   );
 }

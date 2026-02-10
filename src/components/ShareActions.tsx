@@ -26,7 +26,7 @@ export function ShareActions({ title }: ShareActionsProps) {
     <div className="space-y-3">
       <button
         onClick={copyLink}
-        className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
+        className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent active:scale-95"
       >
         Compartir
       </button>
@@ -34,7 +34,7 @@ export function ShareActions({ title }: ShareActionsProps) {
         href={whatsappLink}
         target="_blank"
         rel="noreferrer"
-        className="inline-flex w-full items-center justify-center rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
+        className="inline-flex w-full items-center justify-center rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent hover:shadow-[0_0_12px_rgba(0,255,163,0.35)] active:scale-95"
       >
         WhatsApp
       </a>

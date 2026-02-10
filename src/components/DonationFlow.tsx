@@ -152,7 +152,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
   return (
     <>
       {isClosed && (
-        <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <div className="mb-4 rounded-2xl border border-ember/40 bg-ember/10 px-4 py-3 text-sm text-ember">
           Este proyecto está en estado {statusLabel}. Las donaciones están pausadas.
         </div>
       )}
@@ -165,11 +165,11 @@ export function DonationFlow({ project }: DonationFlowProps) {
               : `${Math.round(metrics.fundedPercent)}%`;
 
           return (
-            <div key={item.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div key={item.id} className="rounded-2xl border border-white/10 bg-card p-4 shadow-card">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h4 className="text-base font-semibold text-ink">{item.name}</h4>
-                  <p className="text-xs text-steel">
+                  <h4 className="text-base font-semibold text-white">{item.name}</h4>
+                  <p className="text-xs text-slate-400">
                     {item.type === "unit" && item.unitPrice
                       ? `${item.qty} unidades · ${formatCurrency(convertFromMXN(item.unitPrice, currency, rates), currency)} c/u`
                       : item.totalPrice
@@ -178,7 +178,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
                     {item.neededByWeek ? ` · semana ${item.neededByWeek}` : ""}
                   </p>
                 </div>
-                <span className="text-xs font-semibold text-steel">{totalLabel}</span>
+                <span className="text-xs font-semibold text-slate-400">{totalLabel}</span>
               </div>
               <div className="mt-3 space-y-2">
                 <ProgressBar value={metrics.fundedPercent} />
@@ -187,7 +187,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
                     <button
                       onClick={() => openFlow(item, "unit")}
                       disabled={isClosed}
-                      className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-ink disabled:opacity-40"
+                      className="rounded-full border border-white/10 px-3 py-1 text-xs font-semibold text-slate-100 transition hover:border-accent hover:text-accent disabled:opacity-40"
                     >
                       Financiar 1 unidad
                     </button>
@@ -196,7 +196,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
                     <button
                       onClick={() => openFlow(item, "percentage")}
                       disabled={isClosed}
-                      className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-ink disabled:opacity-40"
+                      className="rounded-full border border-white/10 px-3 py-1 text-xs font-semibold text-slate-100 transition hover:border-accent hover:text-accent disabled:opacity-40"
                     >
                       Aportar porcentaje
                     </button>
@@ -204,7 +204,7 @@ export function DonationFlow({ project }: DonationFlowProps) {
                   <button
                     onClick={() => openFlow(item, "amount")}
                     disabled={isClosed}
-                    className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-ink disabled:opacity-40"
+                    className="rounded-full border border-white/10 px-3 py-1 text-xs font-semibold text-slate-100 transition hover:border-accent hover:text-accent disabled:opacity-40"
                   >
                     Aportar monto libre
                   </button>
@@ -215,24 +215,24 @@ export function DonationFlow({ project }: DonationFlowProps) {
         })}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/90 p-4 backdrop-blur">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-mist/90 p-4 backdrop-blur">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-semibold text-ink">¿Listo para construir?</p>
-            <p className="text-xs text-steel">Financia una pieza o dona un monto libre.</p>
+            <p className="text-sm font-semibold text-white">¿Listo para construir?</p>
+            <p className="text-xs text-slate-400">Financia una pieza o dona un monto libre.</p>
           </div>
           <div className="flex gap-2">
             <button
               onClick={() => openFlow()}
               disabled={isClosed}
-              className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-ink disabled:opacity-40"
+              className="rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent disabled:opacity-40"
             >
               Donar
             </button>
             <button
               onClick={() => openFlow(selectedItem, "unit")}
               disabled={isClosed}
-              className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"
+              className="rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent disabled:opacity-40"
             >
               Financiar una pieza
             </button>
@@ -241,11 +241,11 @@ export function DonationFlow({ project }: DonationFlowProps) {
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur">
+          <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-card p-6 shadow-card">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-ink">Donación (DEMO)</h3>
-              <button onClick={() => setIsOpen(false)} className="text-sm text-steel">
+              <h3 className="text-lg font-semibold text-white">Donación (DEMO)</h3>
+              <button onClick={() => setIsOpen(false)} className="text-sm text-slate-400 hover:text-accent">
                 Cerrar
               </button>
             </div>
@@ -253,9 +253,9 @@ export function DonationFlow({ project }: DonationFlowProps) {
             {step === 1 && (
               <div className="mt-4 space-y-4">
                 <div>
-                  <label className="text-xs font-semibold uppercase text-steel">Moneda de visualización</label>
+                  <label className="text-xs font-semibold uppercase text-slate-400">Moneda de visualización</label>
                   <select
-                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm"
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                     value={currency}
                     onChange={(event) => setCurrency(event.target.value as typeof currency)}
                   >
@@ -263,15 +263,15 @@ export function DonationFlow({ project }: DonationFlowProps) {
                     <option value="USD">USD</option>
                     <option value="EUR">EUR</option>
                   </select>
-                  <p className="mt-2 text-xs text-steel">
+                  <p className="mt-2 text-xs text-slate-400">
                     Tipo de cambio demo: 1 USD ≈ {(1 / demoRates.USD).toFixed(2)} MXN · 1 EUR ≈ {(1 / demoRates.EUR).toFixed(2)} MXN
                   </p>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold uppercase text-steel">Pieza / material</label>
+                  <label className="text-xs font-semibold uppercase text-slate-400">Pieza / material</label>
                   <select
-                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm"
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                     value={selectedItemId}
                     onChange={(event) => setSelectedItemId(event.target.value)}
                   >
@@ -285,53 +285,53 @@ export function DonationFlow({ project }: DonationFlowProps) {
 
                 {selectedItem?.type === "unit" && (
                   <div>
-                    <label className="text-xs font-semibold uppercase text-steel">Cantidad</label>
+                    <label className="text-xs font-semibold uppercase text-slate-400">Cantidad</label>
                     <input
                       type="number"
                       min={1}
                       value={quantity}
                       onChange={(event) => setQuantity(Number(event.target.value))}
-                      className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                      className="mt-2 w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                     />
                   </div>
                 )}
 
                 {selectedItem?.type !== "unit" && mode === "percentage" && (
                   <div>
-                    <label className="text-xs font-semibold uppercase text-steel">Porcentaje</label>
+                    <label className="text-xs font-semibold uppercase text-slate-400">Porcentaje</label>
                     <input
                       type="number"
                       min={1}
                       max={100}
                       value={percent}
                       onChange={(event) => setPercent(Number(event.target.value))}
-                      className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                      className="mt-2 w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                     />
                   </div>
                 )}
 
                 {mode === "amount" && (
                   <div>
-                    <label className="text-xs font-semibold uppercase text-steel">Monto libre ({currency})</label>
+                    <label className="text-xs font-semibold uppercase text-slate-400">Monto libre ({currency})</label>
                     <input
                       type="number"
                       min={1}
                       value={amount}
                       onChange={(event) => setAmount(Number(event.target.value))}
-                      className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                      className="mt-2 w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                     />
                   </div>
                 )}
 
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm">
-                  <p className="text-steel">
-                    Total estimado: <span className="font-semibold text-ink">{formatCurrency(displayAmount, currency)}</span>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm">
+                  <p className="text-slate-400">
+                    Total estimado: <span className="font-semibold text-money">{formatCurrency(displayAmount, currency)}</span>
                   </p>
                 </div>
 
                 <button
                   onClick={() => setStep(2)}
-                  className="w-full rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white"
+                  className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
                 >
                   Continuar
                 </button>
@@ -341,14 +341,16 @@ export function DonationFlow({ project }: DonationFlowProps) {
             {step === 2 && (
               <div className="mt-4 space-y-4">
                 <div>
-                  <label className="text-xs font-semibold uppercase text-steel">Método de pago</label>
+                  <label className="text-xs font-semibold uppercase text-slate-400">Método de pago</label>
                   <div className="mt-2 grid gap-2">
                     {(["card", "paypal", "oxxo", "spei", "solana"] as PaymentMethod[]).map((method) => (
                       <button
                         key={method}
                         onClick={() => setPaymentMethod(method)}
                         className={`rounded-2xl border px-4 py-2 text-sm font-semibold ${
-                          paymentMethod === method ? "border-ink text-ink" : "border-slate-200 text-steel"
+                          paymentMethod === method
+                            ? "border-money text-money"
+                            : "border-white/10 text-slate-400"
                         }`}
                       >
                         {method === "card" && "Tarjeta"}
@@ -363,14 +365,16 @@ export function DonationFlow({ project }: DonationFlowProps) {
 
                 {paymentMethod === "solana" && (
                   <div>
-                    <label className="text-xs font-semibold uppercase text-steel">Moneda crypto</label>
+                    <label className="text-xs font-semibold uppercase text-slate-400">Moneda crypto</label>
                     <div className="mt-2 flex gap-2">
                       {(["SOL", "USDC"] as SolanaCurrency[]).map((crypto) => (
                         <button
                           key={crypto}
                           onClick={() => setSolanaCurrency(crypto)}
                           className={`rounded-full border px-3 py-1 text-xs font-semibold ${
-                            solanaCurrency === crypto ? "border-ink text-ink" : "border-slate-200 text-steel"
+                            solanaCurrency === crypto
+                              ? "border-crypto text-crypto"
+                              : "border-white/10 text-slate-400"
                           }`}
                         >
                           {crypto}
@@ -381,24 +385,24 @@ export function DonationFlow({ project }: DonationFlowProps) {
                 )}
 
                 <div>
-                  <label className="text-xs font-semibold uppercase text-steel">Nombre / Empresa</label>
+                  <label className="text-xs font-semibold uppercase text-slate-400">Nombre / Empresa</label>
                   <input
                     type="text"
                     value={donorName}
                     onChange={(event) => setDonorName(event.target.value)}
-                    className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                   />
                 </div>
 
                 <button
                   onClick={() => setStep(3)}
-                  className="w-full rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white"
+                  className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
                 >
                   Continuar
                 </button>
                 <button
                   onClick={() => setStep(1)}
-                  className="w-full rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-ink"
+                  className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
                 >
                   Volver
                 </button>
@@ -407,21 +411,25 @@ export function DonationFlow({ project }: DonationFlowProps) {
 
             {step === 3 && (
               <div className="mt-4 space-y-4">
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
-                  <p className="font-semibold text-ink">Resumen</p>
-                  <p className="mt-2 text-steel">Pieza: {selectedItem?.name}</p>
-                  <p className="text-steel">
-                    Aporte: {formatCurrency(displayAmount, currency)} (≈ <Money amount={baseAmountMXN} />)
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm">
+                  <p className="font-semibold text-slate-100">Resumen</p>
+                  <p className="mt-2 text-slate-400">Pieza: {selectedItem?.name}</p>
+                  <p className="text-slate-400">
+                    Aporte: <span className="text-money">{formatCurrency(displayAmount, currency)}</span> (≈{" "}
+                    <span className="text-money">
+                      <Money amount={baseAmountMXN} />
+                    </span>
+                    )
                   </p>
-                  <p className="text-steel">Método: {paymentMethod === "solana" ? "Solana" : paymentMethod}</p>
+                  <p className="text-slate-400">Método: {paymentMethod === "solana" ? "Solana" : paymentMethod}</p>
                 </div>
 
                 {paymentMethod !== "solana" && (
                   <div className="space-y-3">
-                    <p className="text-sm text-steel">Demo: integración de pago en camino.</p>
+                    <p className="text-sm text-slate-400">Demo: integración de pago en camino.</p>
                     <button
                       onClick={handleFiatPayment}
-                      className="w-full rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white"
+                      className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
                     >
                       Simular pago
                     </button>
@@ -430,11 +438,11 @@ export function DonationFlow({ project }: DonationFlowProps) {
 
                 {paymentMethod === "solana" && (
                   <div className="space-y-3">
-                    <p className="text-sm text-steel">
+                    <p className="text-sm text-slate-400">
                       Demo Solana Pay en devnet. Escanea el QR o abre el link en tu wallet.
                     </p>
                     {qrDataUrl && (
-                      <img src={qrDataUrl} alt="Solana Pay QR" className="mx-auto h-40 w-40" />
+                      <img src={qrDataUrl} alt="Solana Pay QR" className="mx-auto h-40 w-40 rounded-2xl border border-white/10 bg-white p-2" />
                     )}
                     {solanaPayUrl && (
                       <div className="space-y-2">
@@ -442,13 +450,13 @@ export function DonationFlow({ project }: DonationFlowProps) {
                           href={solanaPayUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex w-full items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-ink"
+                          className="inline-flex w-full items-center justify-center rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
                         >
                           Abrir en wallet
                         </a>
                         <button
                           onClick={() => navigator.clipboard.writeText(solanaPayUrl)}
-                          className="w-full rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-ink"
+                          className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
                         >
                           Copiar link
                         </button>
@@ -456,17 +464,17 @@ export function DonationFlow({ project }: DonationFlowProps) {
                     )}
                     <button
                       onClick={checkSolanaStatus}
-                      className="w-full rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white"
+                      className="w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
                     >
                       Verificar pago
                     </button>
-                    {infoMessage && <p className="text-xs text-amber-600">{infoMessage}</p>}
+                    {infoMessage && <p className="text-xs text-ember">{infoMessage}</p>}
                   </div>
                 )}
 
                 <button
                   onClick={() => setStep(2)}
-                  className="w-full rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-ink"
+                  className="w-full rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
                 >
                   Volver
                 </button>
@@ -475,14 +483,14 @@ export function DonationFlow({ project }: DonationFlowProps) {
 
             {step === 4 && (
               <div className="mt-6 space-y-3 text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-2xl">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-money/20 text-2xl text-money">
                   🧱
                 </div>
-                <h4 className="text-lg font-semibold text-ink">{successMessage}</h4>
-                <p className="text-sm text-steel">Medalla obtenida: {badgeLabel}</p>
+                <h4 className="text-lg font-semibold text-slate-100">{successMessage}</h4>
+                <p className="text-sm text-slate-400">Medalla obtenida: {badgeLabel}</p>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="mt-2 w-full rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white"
+                  className="mt-2 w-full rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
                 >
                   Cerrar
                 </button>

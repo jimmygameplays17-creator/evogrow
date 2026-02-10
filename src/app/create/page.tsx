@@ -99,25 +99,25 @@ export default function CreateProjectPage() {
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
-      <section className="rounded-3xl bg-white p-8 shadow-card">
-        <h1 className="text-2xl font-semibold text-ink">Proponer proyecto</h1>
-        <p className="mt-2 text-sm text-steel">Los proyectos se publican después de aprobación admin.</p>
+      <section className="rounded-3xl border border-white/10 bg-card p-8 shadow-card">
+        <h1 className="text-2xl font-semibold text-white">Proponer proyecto</h1>
+        <p className="mt-2 text-sm text-slate-400">Los proyectos se publican después de aprobación admin.</p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-steel">Título</label>
+            <label className="text-xs font-semibold uppercase text-slate-400">Título</label>
             <input
               value={title}
               onChange={(event) => setTitle(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-steel">Zona</label>
+            <label className="text-xs font-semibold uppercase text-slate-400">Zona</label>
             <select
               value={zone}
               onChange={(event) => setZone(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
             >
               {zones.map((item) => (
                 <option key={item}>{item}</option>
@@ -125,71 +125,71 @@ export default function CreateProjectPage() {
             </select>
           </div>
           <div className="space-y-2 md:col-span-2">
-            <label className="text-xs font-semibold uppercase text-steel">Descripción</label>
+            <label className="text-xs font-semibold uppercase text-slate-400">Descripción</label>
             <textarea
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
               rows={3}
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-steel">Meta</label>
+            <label className="text-xs font-semibold uppercase text-slate-400">Meta</label>
             <input
               type="number"
               value={goal}
               onChange={(event) => setGoal(Number(event.target.value))}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-steel">Duración (días)</label>
+            <label className="text-xs font-semibold uppercase text-slate-400">Duración (días)</label>
             <input
               type="number"
               value={durationDays}
               onChange={(event) => setDurationDays(Number(event.target.value))}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-steel">Cover image URL</label>
+            <label className="text-xs font-semibold uppercase text-slate-400">Cover image URL</label>
             <input
               value={coverImage}
               onChange={(event) => setCoverImage(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-steel">Tipo de proyecto</label>
+            <label className="text-xs font-semibold uppercase text-slate-400">Tipo de proyecto</label>
             <select
               value={projectType}
               onChange={(event) => setProjectType(event.target.value as ProjectType)}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
             >
               <option value="community">Comunidad</option>
               <option value="official">Oficial</option>
             </select>
             {projectType === "community" && (
-              <p className="text-xs text-steel">
+              <p className="text-xs text-slate-400">
                 Comunidad: campañas libres creadas por personas. Apoya lo que tú quieras. No son proyectos oficiales.
               </p>
             )}
           </div>
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-steel">Organizador</label>
+            <label className="text-xs font-semibold uppercase text-slate-400">Organizador</label>
             <input
               value={organizer}
               onChange={(event) => setOrganizer(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
             />
           </div>
           {projectType === "community" && (
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase text-steel">Categoría</label>
+              <label className="text-xs font-semibold uppercase text-slate-400">Categoría</label>
               <select
                 value={category}
                 onChange={(event) => setCategory(event.target.value as CommunityCategory)}
-                className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
               >
                 {communityCategories.map((item) => (
                   <option key={item} value={item}>
@@ -202,22 +202,22 @@ export default function CreateProjectPage() {
           {projectType === "official" && (
             <>
               <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase text-steel">Tipo de entidad</label>
+                <label className="text-xs font-semibold uppercase text-slate-400">Tipo de entidad</label>
                 <select
                   value={orgType}
                   onChange={(event) => setOrgType(event.target.value as OrgType)}
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                  className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                 >
                   <option value="Business">Empresa</option>
                   <option value="Government">Gobierno</option>
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase text-steel">Prueba de verificación</label>
+                <label className="text-xs font-semibold uppercase text-slate-400">Prueba de verificación</label>
                 <input
                   value={verificationDoc}
                   onChange={(event) => setVerificationDoc(event.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                  className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                   placeholder="URL o folio de verificación"
                 />
               </div>
@@ -227,30 +227,33 @@ export default function CreateProjectPage() {
 
         <div className="mt-8 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-ink">BOM builder</h2>
-            <button onClick={addItem} className="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold">
+            <h2 className="text-lg font-semibold text-white">BOM builder</h2>
+            <button
+              onClick={addItem}
+              className="rounded-full border border-white/10 px-4 py-2 text-xs font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
+            >
               Agregar pieza
             </button>
           </div>
 
           <div className="space-y-4">
             {items.map((item, index) => (
-              <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div key={item.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="grid gap-3 md:grid-cols-2">
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase text-steel">Nombre</label>
+                    <label className="text-xs font-semibold uppercase text-slate-400">Nombre</label>
                     <input
                       value={item.name}
                       onChange={(event) => updateItem(index, { name: event.target.value })}
-                      className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                      className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase text-steel">Tipo</label>
+                    <label className="text-xs font-semibold uppercase text-slate-400">Tipo</label>
                     <select
                       value={item.type}
                       onChange={(event) => updateItem(index, { type: event.target.value as BomType })}
-                      className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                      className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                     >
                       <option value="unit">Unitario</option>
                       <option value="total">Total</option>
@@ -260,43 +263,43 @@ export default function CreateProjectPage() {
                   {item.type === "unit" && (
                     <>
                       <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase text-steel">Cantidad</label>
+                        <label className="text-xs font-semibold uppercase text-slate-400">Cantidad</label>
                         <input
                           type="number"
                           value={item.qty}
                           onChange={(event) => updateItem(index, { qty: Number(event.target.value) })}
-                          className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                          className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase text-steel">Precio unitario</label>
+                        <label className="text-xs font-semibold uppercase text-slate-400">Precio unitario</label>
                         <input
                           type="number"
                           value={item.unitPrice}
                           onChange={(event) => updateItem(index, { unitPrice: Number(event.target.value) })}
-                          className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                          className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                         />
                       </div>
                     </>
                   )}
                   {item.type !== "unit" && (
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold uppercase text-steel">Precio total</label>
+                      <label className="text-xs font-semibold uppercase text-slate-400">Precio total</label>
                       <input
                         type="number"
                         value={item.totalPrice}
                         onChange={(event) => updateItem(index, { totalPrice: Number(event.target.value) })}
-                        className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                        className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                       />
                     </div>
                   )}
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase text-steel">Se necesita en semana</label>
+                    <label className="text-xs font-semibold uppercase text-slate-400">Se necesita en semana</label>
                     <input
                       type="number"
                       value={item.neededByWeek}
                       onChange={(event) => updateItem(index, { neededByWeek: Number(event.target.value) })}
-                      className="w-full rounded-2xl border border-slate-200 px-4 py-2 text-sm"
+                      className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
                     />
                   </div>
                 </div>
@@ -307,7 +310,7 @@ export default function CreateProjectPage() {
 
         <button
           onClick={handleSubmit}
-          className="mt-8 w-full rounded-full bg-ink px-4 py-3 text-sm font-semibold text-white"
+          className="mt-8 w-full rounded-full bg-money px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-accent"
         >
           Guardar propuesta (Pending)
         </button>

@@ -16,14 +16,14 @@ export function LoginModal() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white"
+        className="rounded-full bg-money px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-accent"
       >
         Open Login
       </button>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur">
-          <div className="w-full max-w-md overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 shadow-2xl">
+          <div className="w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 shadow-2xl">
             <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
               <h2 className="text-lg font-semibold text-white">Welcome to Fundra</h2>
               <button onClick={() => setIsOpen(false)} className="text-sm text-slate-300 hover:text-white">
@@ -32,7 +32,7 @@ export function LoginModal() {
             </div>
 
             <div className="space-y-5 px-6 py-6 text-slate-100">
-              <button className="w-full rounded-full bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:shadow-lg">
+              <button className="w-full rounded-full bg-money px-4 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-accent hover:shadow-lg">
                 Continue with Google
               </button>
 
@@ -48,7 +48,7 @@ export function LoginModal() {
                   placeholder="Email address"
                   className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-white/30 focus:outline-none"
                 />
-                <button className="w-full rounded-full border border-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10">
+                <button className="w-full rounded-full border border-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-accent hover:text-accent hover:bg-white/5">
                   Continue
                 </button>
               </div>

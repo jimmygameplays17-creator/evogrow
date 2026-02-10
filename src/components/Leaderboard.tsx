@@ -35,26 +35,29 @@ export function Leaderboard({
             className={classNames(
               "flex items-center justify-between rounded-2xl border px-4 py-3 text-sm",
               isHighlighted
-                ? "border-emerald-200 bg-emerald-50"
+                ? "border-money/60 bg-money/10"
                 : isTop
-                  ? "border-amber-200 bg-amber-50"
-                  : "border-slate-200 bg-white"
+                  ? "border-crypto/60 bg-crypto/10"
+                  : "border-white/10 bg-card"
             )}
           >
             <div className="flex items-center gap-3">
-              <span className={classNames("text-xs font-semibold", isTop ? "text-amber-700" : "text-steel")}>
+              <span className={classNames("text-xs font-semibold", isTop ? "text-crypto" : "text-slate-400")}>
                 #{index + 1}
               </span>
               <div>
-                <p className="font-semibold text-ink">{entry.donorName}</p>
-                <p className="text-xs text-steel">
-                  <Money amount={entry.total} /> donado
+                <p className="font-semibold text-slate-100">{entry.donorName}</p>
+                <p className="text-xs text-slate-400">
+                  <span className="text-money">
+                    <Money amount={entry.total} />
+                  </span>{" "}
+                  donado
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               {isHighlighted && (
-                <span className="rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-700">
+                <span className="rounded-full bg-money/20 px-2 py-1 text-[10px] font-semibold text-money">
                   Tú
                 </span>
               )}
@@ -65,7 +68,7 @@ export function Leaderboard({
         );
       })}
       {entries.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-6 text-center text-sm text-steel">
+        <div className="rounded-2xl border border-dashed border-white/10 px-4 py-6 text-center text-sm text-slate-400">
           Aún no hay builders registrados.
         </div>
       )}

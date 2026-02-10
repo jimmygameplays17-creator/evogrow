@@ -2,9 +2,9 @@ import { OrgType } from "@/lib/types";
 import classNames from "classnames";
 
 const colorMap: Record<OrgType, string> = {
-  Community: "bg-slate-100 text-slate-700",
-  Business: "bg-blue-50 text-blue-700",
-  Government: "bg-emerald-50 text-emerald-700"
+  Community: "bg-white/10 text-slate-200",
+  Business: "bg-money/15 text-money",
+  Government: "bg-money/15 text-money"
 };
 
 export function Badge({ orgType, label }: { orgType: OrgType; label?: string }) {

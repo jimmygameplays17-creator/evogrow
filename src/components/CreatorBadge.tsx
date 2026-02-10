@@ -2,7 +2,7 @@
 
 export function CreatorBadge() {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full border border-yellow-300/40 bg-gradient-to-r from-crypto/35 to-yellow-300/20 px-3 py-1 text-xs font-semibold text-yellow-100">
+    <span className="inline-flex h-5 items-center gap-1 rounded-full border border-yellow-300/35 bg-gradient-to-r from-crypto/30 to-yellow-300/15 px-2 py-0.5 text-[10px] font-semibold leading-none text-yellow-100">
       ⭐ Creator Verified
     </span>
   );

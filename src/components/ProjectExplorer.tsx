@@ -6,7 +6,6 @@ import Image from "next/image";
 import { CompletionStatus, Project, ProjectType } from "@/lib/types";
 import { ProjectCard } from "@/components/ProjectCard";
 import { computeProjectMetrics } from "@/lib/data";
-import { TagPills } from "@/components/TagPills";
 
 const zones = ["Fuentes de las Lomas", "Interlomas", "Naucalpan"];
 
@@ -157,7 +156,6 @@ export function ProjectExplorer({
                   <Image src={project.coverImage} alt={project.title} fill className="object-cover" />
                 </div>
                 <div className="space-y-2 px-4 py-4">
-                  <TagPills tags={project.tags} maxVisible={2} />
                   <h3 className="text-base font-semibold text-white">{project.title}</h3>
                   <p className="text-xs text-slate-400">{project.zone}</p>
                   <p className="text-xs text-money">
@@ -170,7 +168,7 @@ export function ProjectExplorer({
         </section>
       )}
 
-      <section className="mt-10 grid auto-rows-fr grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <section className="mt-8 grid auto-rows-fr grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         {sortedProjects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}

@@ -168,7 +168,7 @@ export function ProjectExplorer({
         </section>
       )}
 
-      <section className="mt-8 grid auto-rows-fr grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+      <section className="mt-8 grid auto-rows-fr grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
         {sortedProjects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}

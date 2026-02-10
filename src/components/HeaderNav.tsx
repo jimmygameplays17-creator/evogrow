@@ -8,6 +8,7 @@ import { getUser, logout, AuthUser } from "@/lib/auth";
 
 const navItems = [
   { href: "/", label: "Explorar" },
+  { href: "/new", label: "New" },
   { href: "/how-it-works", label: "Cómo funciona" },
   { href: "/officials", label: "Oficial" },
   { href: "/community", label: "Comunidad" },

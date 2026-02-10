@@ -2,12 +2,14 @@
 
 import classNames from "classnames";
 
-const tagConfig: Record<string, { icon: string; className: string }> = {
-  Oficial: { icon: "🏛", className: "border-money/40 bg-money/10 text-money" },
+const tagConfig: Record<string, { icon: string; className: string; label?: string }> = {
+  Oficial: { icon: "🏛", className: "border-money/40 bg-money/10 text-money", label: "OFICIAL" },
   Creador: { icon: "⭐", className: "border-crypto/40 bg-crypto/10 text-crypto" },
-  Verified: { icon: "✓", className: "border-white/20 bg-white/5 text-slate-200" },
+  Verified: { icon: "✓", className: "border-white/20 bg-white/5 text-slate-200", label: "VERIFIED" },
   Tendencia: { icon: "🔥", className: "border-ember/40 bg-ember/10 text-ember" },
-  Nuevo: { icon: "🆕", className: "border-accent/40 bg-accent/10 text-accent" },
+  Nuevo: { icon: "🆕", className: "border-accent/40 bg-accent/10 text-accent", label: "NEW" },
+  New: { icon: "🆕", className: "border-accent/40 bg-accent/10 text-accent", label: "NEW" },
+  Live: { icon: "●", className: "border-accent/40 bg-accent/10 text-accent", label: "LIVE" },
   "Últimos días": { icon: "⏳", className: "border-ember/40 bg-ember/10 text-ember" }
 };
 
@@ -37,7 +39,7 @@ export function TagPills({ tags, maxVisible = 3 }: TagPillsProps) {
             )}
           >
             <span className="text-xs">{config.icon}</span>
-            {tag}
+            {config.label ?? tag}
           </span>
         );
       })}

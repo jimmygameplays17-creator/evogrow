@@ -16,6 +16,7 @@ interface ProjectExplorerProps {
   subtitle: string;
   typeFilter?: ProjectType;
   completionFilter?: CompletionStatus;
+  tagFilter?: string;
   infoText?: string;
   showTopBuildersPreview?: boolean;
   showTrending?: boolean;
@@ -26,6 +27,7 @@ export function ProjectExplorer({
   subtitle,
   typeFilter,
   completionFilter,
+  tagFilter,
   infoText,
   showTopBuildersPreview = true,
   showTrending = false
@@ -61,14 +63,15 @@ export function ProjectExplorer({
   }, [showTopBuildersPreview]);
 
   const sortedProjects = useMemo(() => {
-    const copy = [...projects];
+    const filtered = tagFilter ? projects.filter((project) => project.tags.includes(tagFilter)) : projects;
+    const copy = [...filtered];
     if (sortBy === "urgentes") {
       return copy.sort(
         (a, b) => computeProjectMetrics(a).daysRemaining - computeProjectMetrics(b).daysRemaining
       );
     }
     return copy.sort((a, b) => a.title.localeCompare(b.title));
-  }, [projects, sortBy]);
+  }, [projects, sortBy, tagFilter]);
 
   const trendingProjects = useMemo(() => {
     return [...projects].sort((a, b) => b.trendScore - a.trendScore).slice(0, 6);
@@ -175,7 +178,7 @@ export function ProjectExplorer({
         </section>
       )}
 
-      <section className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <section className="mt-10 grid auto-rows-fr grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {sortedProjects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}

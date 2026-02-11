@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className={classNames(inter.className, "min-h-screen")}> 
+      <body className={classNames(inter.className, "min-h-screen overflow-x-hidden")}> 
         <HeaderBar />
         <CurrencyProvider>
           <AuthGate>{children}</AuthGate>

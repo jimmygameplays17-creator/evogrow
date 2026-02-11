@@ -1,196 +1,131 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BomItem, BomType, CommunityCategory, OrgType, ProjectType } from "@/lib/types";
+import { CommunityCategory, OrgType, ProjectType } from "@/lib/types";
 
 const zones = ["Fuentes de las Lomas", "Interlomas", "Naucalpan"];
-const communityCategories: CommunityCategory[] = ["Personal", "Mascotas", "Escuela", "Hogar", "Transporte", "Otro"];
+const categories = [
+  { value: "official", label: "Oficial" },
+  { value: "community", label: "Comunidad" },
+  { value: "creator", label: "Creadores" }
+] as const;
 
-interface DraftItem {
-  id: string;
-  name: string;
-  type: BomType;
-  qty: number;
-  unitPrice: number;
-  totalPrice: number;
-  neededByWeek: number;
-}
+const communityCategories: CommunityCategory[] = ["Personal", "Mascotas", "Escuela", "Hogar", "Transporte", "Otro"];
 
 export default function CreateProjectPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
+  const [goal, setGoal] = useState(50000);
   const [zone, setZone] = useState(zones[0]);
+  const [projectType, setProjectType] = useState<ProjectType>("community");
   const [description, setDescription] = useState("");
-  const [goal, setGoal] = useState(150000);
-  const [durationDays, setDurationDays] = useState(30);
+  const [isLive, setIsLive] = useState(false);
+  const [liveUrl, setLiveUrl] = useState("");
   const [coverImage, setCoverImage] = useState(
     "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
   );
-  const [projectType, setProjectType] = useState<ProjectType>("community");
-  const [category, setCategory] = useState<CommunityCategory>("Personal");
   const [organizer, setOrganizer] = useState("");
-  const [orgType, setOrgType] = useState<OrgType>("Government");
-  const [verificationDoc, setVerificationDoc] = useState("");
-  const [items, setItems] = useState<DraftItem[]>([
-    {
-      id: "draft-1",
-      name: "",
-      type: "unit",
-      qty: 1,
-      unitPrice: 1000,
-      totalPrice: 0,
-      neededByWeek: 1
-    }
-  ]);
+  const [category, setCategory] = useState<CommunityCategory>("Personal");
 
-  const addItem = () => {
-    setItems((prev) => [
-      ...prev,
-      {
-        id: `draft-${prev.length + 1}`,
-        name: "",
-        type: "unit",
-        qty: 1,
-        unitPrice: 1000,
-        totalPrice: 0,
-        neededByWeek: 1
-      }
-    ]);
-  };
+  const canSubmit = useMemo(() => title.trim() && description.trim() && goal > 0, [title, description, goal]);
 
-  const updateItem = (index: number, update: Partial<DraftItem>) => {
-    setItems((prev) => prev.map((item, idx) => (idx === index ? { ...item, ...update } : item)));
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const localPreview = URL.createObjectURL(file);
+    setCoverImage(localPreview);
   };
 
   const handleSubmit = async () => {
-    const bom: BomItem[] = items.map((item) => ({
-      id: `bom-${item.id}`,
-      name: item.name,
-      type: item.type,
-      qty: item.type === "unit" ? item.qty : undefined,
-      unitPrice: item.type === "unit" ? item.unitPrice : undefined,
-      totalPrice: item.type !== "unit" ? item.totalPrice : undefined,
-      fundedAmount: 0,
-      neededByWeek: item.neededByWeek
-    }));
+    if (!canSubmit) return;
 
-    await fetch("/api/projects", {
+    const orgType: OrgType = projectType === "official" ? "Government" : projectType === "creator" ? "Business" : "Community";
+    const payload = {
+      title,
+      goal,
+      zone,
+      type: projectType,
+      description,
+      coverImage,
+      organizer: organizer || (projectType === "creator" ? "Creator Team" : "Comunidad Fundra"),
+      orgType,
+      durationDays: 30,
+      verificationDoc: projectType === "official" ? "Demo verification" : undefined,
+      category: projectType === "community" ? category : undefined,
+      bom: [],
+      isLive,
+      liveUrl: liveUrl || undefined,
+      livePlatform: liveUrl.includes("twitch")
+        ? "twitch"
+        : liveUrl.includes("youtube")
+          ? "youtube"
+          : liveUrl.includes("tiktok")
+            ? "tiktok"
+            : "other",
+      creatorName: projectType === "creator" ? organizer || "Creator" : undefined,
+      creatorVerified: projectType === "creator",
+      ownerHandle:
+        projectType === "creator"
+          ? (organizer || "creator").toLowerCase().replace(/\s+/g, "")
+          : undefined
+    };
+
+    const response = await fetch("/api/projects", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title,
-        zone,
-        description,
-        goal,
-        durationDays,
-        coverImage,
-        organizer,
-        orgType: projectType === "official" ? orgType : "Community",
-        type: projectType,
-        verificationDoc: projectType === "official" ? verificationDoc : undefined,
-        category: projectType === "community" ? category : undefined,
-        bom
-      })
+      body: JSON.stringify(payload)
     });
-
-    router.push("/admin");
+    const data = await response.json();
+    const nextSlug = data?.project?.slug;
+    if (nextSlug) {
+      router.push(`/p/${nextSlug}`);
+      return;
+    }
+    router.push(`/projects/${data?.project?.id}`);
   };
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-10">
+    <main className="mx-auto max-w-4xl px-6 py-10">
       <section className="rounded-3xl border border-white/10 bg-card p-8 shadow-card">
-        <h1 className="text-2xl font-semibold text-white">Proponer proyecto</h1>
-        <p className="mt-2 text-sm text-slate-400">Los proyectos se publican después de aprobación admin.</p>
+        <h1 className="text-2xl font-semibold text-white">Create</h1>
+        <p className="mt-2 text-sm text-slate-400">Formulario demo estilo pump.fun para crear campañas rápidas.</p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-slate-400">Título</label>
-            <input
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-            />
+          <div className="space-y-2 md:col-span-2">
+            <label className="text-xs font-semibold uppercase text-slate-400">Title</label>
+            <input value={title} onChange={(event) => setTitle(event.target.value)} className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100" />
           </div>
+
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-slate-400">Zona</label>
-            <select
-              value={zone}
-              onChange={(event) => setZone(event.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-            >
+            <label className="text-xs font-semibold uppercase text-slate-400">Goal</label>
+            <input type="number" value={goal} onChange={(event) => setGoal(Number(event.target.value))} className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-semibold uppercase text-slate-400">Zone</label>
+            <select value={zone} onChange={(event) => setZone(event.target.value)} className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100">
               {zones.map((item) => (
                 <option key={item}>{item}</option>
               ))}
             </select>
           </div>
-          <div className="space-y-2 md:col-span-2">
-            <label className="text-xs font-semibold uppercase text-slate-400">Descripción</label>
-            <textarea
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-              rows={3}
-            />
-          </div>
+
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-slate-400">Meta</label>
-            <input
-              type="number"
-              value={goal}
-              onChange={(event) => setGoal(Number(event.target.value))}
-              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-slate-400">Duración (días)</label>
-            <input
-              type="number"
-              value={durationDays}
-              onChange={(event) => setDurationDays(Number(event.target.value))}
-              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-slate-400">Cover image URL</label>
-            <input
-              value={coverImage}
-              onChange={(event) => setCoverImage(event.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-slate-400">Tipo de proyecto</label>
-            <select
-              value={projectType}
-              onChange={(event) => setProjectType(event.target.value as ProjectType)}
-              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-            >
-              <option value="community">Comunidad</option>
-              <option value="official">Oficial</option>
+            <label className="text-xs font-semibold uppercase text-slate-400">Category</label>
+            <select value={projectType} onChange={(event) => setProjectType(event.target.value as ProjectType)} className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100">
+              {categories.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
             </select>
-            {projectType === "community" && (
-              <p className="text-xs text-slate-400">
-                Comunidad: campañas libres creadas por personas. Apoya lo que tú quieras. No son proyectos oficiales.
-              </p>
-            )}
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase text-slate-400">Organizador</label>
-            <input
-              value={organizer}
-              onChange={(event) => setOrganizer(event.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-            />
-          </div>
+
           {projectType === "community" && (
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase text-slate-400">Categoría</label>
-              <select
-                value={category}
-                onChange={(event) => setCategory(event.target.value as CommunityCategory)}
-                className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-              >
+              <label className="text-xs font-semibold uppercase text-slate-400">Community type</label>
+              <select value={category} onChange={(event) => setCategory(event.target.value as CommunityCategory)} className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100">
                 {communityCategories.map((item) => (
                   <option key={item} value={item}>
                     {item}
@@ -199,120 +134,35 @@ export default function CreateProjectPage() {
               </select>
             </div>
           )}
-          {projectType === "official" && (
-            <>
-              <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase text-slate-400">Tipo de entidad</label>
-                <select
-                  value={orgType}
-                  onChange={(event) => setOrgType(event.target.value as OrgType)}
-                  className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-                >
-                  <option value="Business">Empresa</option>
-                  <option value="Government">Gobierno</option>
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase text-slate-400">Prueba de verificación</label>
-                <input
-                  value={verificationDoc}
-                  onChange={(event) => setVerificationDoc(event.target.value)}
-                  className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-                  placeholder="URL o folio de verificación"
-                />
-              </div>
-            </>
-          )}
-        </div>
 
-        <div className="mt-8 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-white">BOM builder</h2>
-            <button
-              onClick={addItem}
-              className="rounded-full border border-white/10 px-4 py-2 text-xs font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
-            >
-              Agregar pieza
-            </button>
+          <div className="space-y-2 md:col-span-2">
+            <label className="text-xs font-semibold uppercase text-slate-400">Description</label>
+            <textarea value={description} onChange={(event) => setDescription(event.target.value)} rows={4} className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100" />
           </div>
 
-          <div className="space-y-4">
-            {items.map((item, index) => (
-              <div key={item.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <div className="grid gap-3 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase text-slate-400">Nombre</label>
-                    <input
-                      value={item.name}
-                      onChange={(event) => updateItem(index, { name: event.target.value })}
-                      className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase text-slate-400">Tipo</label>
-                    <select
-                      value={item.type}
-                      onChange={(event) => updateItem(index, { type: event.target.value as BomType })}
-                      className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-                    >
-                      <option value="unit">Unitario</option>
-                      <option value="total">Total</option>
-                      <option value="flex">Monto libre</option>
-                    </select>
-                  </div>
-                  {item.type === "unit" && (
-                    <>
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase text-slate-400">Cantidad</label>
-                        <input
-                          type="number"
-                          value={item.qty}
-                          onChange={(event) => updateItem(index, { qty: Number(event.target.value) })}
-                          className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase text-slate-400">Precio unitario</label>
-                        <input
-                          type="number"
-                          value={item.unitPrice}
-                          onChange={(event) => updateItem(index, { unitPrice: Number(event.target.value) })}
-                          className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-                        />
-                      </div>
-                    </>
-                  )}
-                  {item.type !== "unit" && (
-                    <div className="space-y-2">
-                      <label className="text-xs font-semibold uppercase text-slate-400">Precio total</label>
-                      <input
-                        type="number"
-                        value={item.totalPrice}
-                        onChange={(event) => updateItem(index, { totalPrice: Number(event.target.value) })}
-                        className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-                      />
-                    </div>
-                  )}
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase text-slate-400">Se necesita en semana</label>
-                    <input
-                      type="number"
-                      value={item.neededByWeek}
-                      onChange={(event) => updateItem(index, { neededByWeek: Number(event.target.value) })}
-                      className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100"
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold uppercase text-slate-400">Organizer / Username</label>
+            <input value={organizer} onChange={(event) => setOrganizer(event.target.value)} className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100" />
           </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-semibold uppercase text-slate-400">Image upload (local)</label>
+            <input type="file" accept="image/*" onChange={handleImageUpload} className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100 file:mr-3 file:rounded-full file:border-0 file:bg-money file:px-3 file:py-1 file:text-xs file:font-semibold file:text-slate-900" />
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <label className="text-xs font-semibold uppercase text-slate-400">Live URL (optional)</label>
+            <input value={liveUrl} onChange={(event) => setLiveUrl(event.target.value)} placeholder="https://twitch.tv/..." className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-2 text-sm text-slate-100" />
+          </div>
+
+          <label className="inline-flex items-center gap-2 text-sm text-slate-200 md:col-span-2">
+            <input type="checkbox" checked={isLive} onChange={(event) => setIsLive(event.target.checked)} className="h-4 w-4 rounded border-white/20 bg-slate-900" />
+            isLive
+          </label>
         </div>
 
-        <button
-          onClick={handleSubmit}
-          className="mt-8 w-full rounded-full bg-money px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-accent"
-        >
-          Guardar propuesta (Pending)
+        <button onClick={handleSubmit} disabled={!canSubmit} className="mt-8 inline-flex h-10 items-center justify-center rounded-full bg-money px-5 text-sm font-semibold text-slate-900 transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60">
+          Create project
         </button>
       </section>
     </main>

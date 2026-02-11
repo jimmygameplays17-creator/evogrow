@@ -2,52 +2,73 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { HeaderNav } from "@/components/HeaderNav";
-import { NotificationBell } from "@/components/NotificationBell";
-import { SearchModal } from "@/components/SearchModal";
+import { AuthModal } from "@/components/AuthModal";
+import { getUser, logout } from "@/lib/auth";
 
 export function HeaderBar() {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const router = useRouter();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const isCmdK = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
-      if (isCmdK) {
-        event.preventDefault();
-        setIsSearchOpen(true);
-      }
-      if (event.key === "Escape") {
-        setIsSearchOpen(false);
-      }
+    const syncAuth = () => setIsAuthed(Boolean(getUser()));
+    syncAuth();
+    window.addEventListener("focus", syncAuth);
+    window.addEventListener("storage", syncAuth);
+    return () => {
+      window.removeEventListener("focus", syncAuth);
+      window.removeEventListener("storage", syncAuth);
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    setIsAuthed(false);
+    router.refresh();
+  };
+
   return (
-    <div className="bg-slate-950/80 backdrop-blur border-b border-white/10 sticky top-0 z-50">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <div className="flex items-center">
+    <div className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/90 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
+        <div className="shrink-0">
           <Link href="/" className="text-xl font-semibold tracking-tight text-white">
             Fundra
           </Link>
-          <button
-            onClick={() => setIsSearchOpen(true)}
-            className="ml-3 inline-flex h-10 items-center gap-2 rounded-full border border-white/10 bg-slate-900/70 px-4 text-sm font-medium text-slate-200 transition hover:border-accent hover:shadow-[0_0_14px_rgba(0,240,255,0.2)] hover:text-accent active:scale-95"
-          >
-            <span>🔍</span>
-            Search
-          </button>
         </div>
 
-        <div className="flex min-w-0 flex-1 items-center justify-end gap-3">
-          <div className="min-w-0 overflow-x-auto">
+        <div className="order-3 w-full md:order-2 md:w-auto md:flex-1">
+          <div className="overflow-hidden">
             <HeaderNav />
           </div>
-          <NotificationBell />
+        </div>
+
+        <div className="order-2 flex shrink-0 items-center gap-2 md:order-3">
+          <Link
+            href="/create"
+            className="inline-flex h-10 items-center justify-center rounded-full bg-money px-4 text-sm font-semibold text-slate-900 transition hover:bg-accent active:scale-95"
+          >
+            Create
+          </Link>
+          {isAuthed ? (
+            <button
+              onClick={handleLogout}
+              className="inline-flex h-10 items-center justify-center rounded-full border border-white/20 bg-slate-900 px-4 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
+            >
+              Log out
+            </button>
+          ) : (
+            <button
+              onClick={() => setIsLoginOpen(true)}
+              className="inline-flex h-10 items-center justify-center rounded-full border border-white/20 bg-slate-900 px-4 text-sm font-semibold text-slate-100 transition hover:border-accent hover:text-accent"
+            >
+              Log in
+            </button>
+          )}
         </div>
       </div>
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <AuthModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </div>
   );
 }

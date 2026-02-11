@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import classNames from "classnames";
-import { getUser, logout, AuthUser } from "@/lib/auth";
 
 const navItems = [
   { href: "/", label: "Explorar" },
@@ -13,29 +11,15 @@ const navItems = [
   { href: "/officials", label: "Oficial" },
   { href: "/community", label: "Comunidad" },
   { href: "/creators", label: "Creadores" },
-  { href: "/create", label: "Proponer" },
-  { href: "/admin", label: "Admin" },
   { href: "/completed", label: "Finalizados" },
   { href: "/builders", label: "Top Builders" }
 ];
 
 export function HeaderNav() {
   const pathname = usePathname();
-  const router = useRouter();
-  const [user, setUser] = useState<AuthUser | null>(null);
-
-  useEffect(() => {
-    setUser(getUser());
-  }, []);
-
-  const handleLogout = () => {
-    logout();
-    setUser(null);
-    router.refresh();
-  };
 
   return (
-    <nav className="flex min-w-max items-center gap-5 whitespace-nowrap text-sm text-slate-200">
+    <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-slate-200">
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         return (
@@ -48,19 +32,6 @@ export function HeaderNav() {
           </Link>
         );
       })}
-      {user && (
-        <>
-          <Link
-            href="/profile"
-            className={classNames("transition hover:text-accent", pathname === "/profile" && "text-white font-semibold")}
-          >
-            Perfil
-          </Link>
-          <button onClick={handleLogout} className="transition hover:text-accent">
-            Logout
-          </button>
-        </>
-      )}
     </nav>
   );
 }

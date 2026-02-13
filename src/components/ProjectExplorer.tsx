@@ -157,7 +157,6 @@ export function ProjectExplorer({
                 </div>
                 <div className="space-y-2 px-4 py-4">
                   <h3 className="text-base font-semibold text-white">{project.title}</h3>
-                  <p className="text-xs text-slate-400">{project.zone}</p>
                   <p className="text-xs text-money">
                     {project.donationsLast24h} aportes · score {project.trendScore}
                   </p>

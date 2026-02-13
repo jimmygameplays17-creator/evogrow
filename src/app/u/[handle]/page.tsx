@@ -59,9 +59,8 @@ export default function PublicUserPage({ params }: PublicUserPageProps) {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <h3 className="font-semibold text-white">{project.title}</h3>
-                  <p className="text-xs text-slate-400">{project.zone}</p>
                 </div>
-                <span className="text-sm text-money">Meta <Money amount={project.goal} /></span>
+                <span className="text-sm text-money">Recaudado <Money amount={metrics.totalRaised} /></span>
               </div>
               <div className="mt-3">
                 <ProgressBar value={metrics.progress} />

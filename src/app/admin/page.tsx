@@ -19,7 +19,6 @@ export default function AdminPage() {
               </div>
               <div className="flex flex-1 flex-col justify-between gap-2">
                 <div>
-                  <p className="text-xs font-semibold uppercase text-slate-400">{project.zone}</p>
                   <h3 className="text-lg font-semibold text-white">{project.title}</h3>
                   <p className="text-sm text-slate-400">{project.description}</p>
                 </div>

@@ -45,7 +45,7 @@ export default function ProfilePage() {
             {projectsDonated.map((project) => (
               <li key={project.id} className="flex items-center justify-between">
                 <span>{project.title}</span>
-                <span className="text-xs font-semibold text-slate-200">{project.zone}</span>
+                <span className="text-xs font-semibold text-slate-200">Proyecto activo</span>
               </li>
             ))}
             {projectsDonated.length === 0 && <li>Aún no has donado a ningún proyecto.</li>}

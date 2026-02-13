@@ -849,13 +849,44 @@ const computeGoalProgress = (project: Project) => {
   return total;
 };
 
+const resolveGoalAmount = (project: Project) => project.goalAmount ?? project.goal;
+
+const resolveCreatorPledgeAmount = (project: Project) => {
+  const goalAmount = resolveGoalAmount(project);
+  const pledgeType = project.creatorPledgeType ?? "fixed";
+  const pledgeValue = Math.max(0, project.creatorPledgeValue ?? 0);
+
+  if (pledgeType === "percent") {
+    const boundedPercent = Math.min(100, pledgeValue);
+    return Math.min(goalAmount, (goalAmount * boundedPercent) / 100);
+  }
+
+  return Math.min(goalAmount, pledgeValue);
+};
+
+const computeFundingBreakdown = (project: Project) => {
+  const goalAmount = resolveGoalAmount(project);
+  const fundedAmountPublic = computeGoalProgress(project);
+  const creatorPledgeAmount = resolveCreatorPledgeAmount(project);
+  const fundedAmountTotal = Math.min(goalAmount, creatorPledgeAmount + fundedAmountPublic);
+  const remainingAmount = Math.max(0, goalAmount - fundedAmountTotal);
+
+  return {
+    goalAmount,
+    creatorPledgeAmount,
+    fundedAmountPublic,
+    fundedAmountTotal,
+    remainingAmount
+  };
+};
+
 const computeDeadline = (project: Project) => {
   const created = new Date(project.createdAt).getTime();
   return new Date(created + project.durationDays * 24 * 60 * 60 * 1000);
 };
 
 const applyStatusRules = (project: Project) => {
-  const total = computeGoalProgress(project);
+  const { fundedAmountTotal, goalAmount } = computeFundingBreakdown(project);
   const deadline = computeDeadline(project);
   const now = new Date();
 
@@ -863,7 +894,7 @@ const applyStatusRules = (project: Project) => {
     return project;
   }
 
-  if (total >= project.goal) {
+  if (fundedAmountTotal >= goalAmount) {
     project.fundingStatus = "Funded";
     return project;
   }
@@ -895,6 +926,15 @@ const recalcBomFunded = (project: Project) => {
 };
 
 const normalizeProject = (project: Project) => {
+  const breakdown = computeFundingBreakdown(project);
+  project.goalAmount = breakdown.goalAmount;
+  project.creatorPledgeAmount = breakdown.creatorPledgeAmount;
+  project.fundedAmountPublic = breakdown.fundedAmountPublic;
+  project.fundedAmountTotal = breakdown.fundedAmountTotal;
+  project.remainingAmount = breakdown.remainingAmount;
+  if (typeof project.creatorPledgeValue !== "number") project.creatorPledgeValue = 0;
+  if (!project.creatorPledgeType) project.creatorPledgeType = "fixed";
+  project.goal = breakdown.goalAmount;
   recalcBomFunded(project);
   applyStatusRules(project);
   return project;
@@ -965,6 +1005,13 @@ export const createProject = (
     ...payload,
     id: createId("project"),
     slug: slugify(payload.title),
+    goalAmount: payload.goalAmount ?? payload.goal,
+    creatorPledgeType: payload.creatorPledgeType ?? "fixed",
+    creatorPledgeValue: payload.creatorPledgeValue ?? 0,
+    creatorPledgeAmount: payload.creatorPledgeAmount ?? 0,
+    fundedAmountPublic: 0,
+    fundedAmountTotal: payload.creatorPledgeAmount ?? 0,
+    remainingAmount: Math.max(0, (payload.goalAmount ?? payload.goal) - (payload.creatorPledgeAmount ?? 0)),
     tags: defaultTags,
     trendScore: 0,
     donationsLast24h: 0,
@@ -1082,11 +1129,22 @@ export const computeBomMetrics = (item: BomItem) => {
 };
 
 export const computeProjectMetrics = (project: Project) => {
-  const totalRaised = computeGoalProgress(project);
+  const breakdown = computeFundingBreakdown(project);
+  const totalRaised = breakdown.fundedAmountTotal;
   const deadline = computeDeadline(project);
   const daysRemaining = Math.max(0, Math.ceil((deadline.getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
-  const progress = Math.min(100, (totalRaised / project.goal) * 100);
-  return { totalRaised, deadline, daysRemaining, progress };
+  const progress = Math.min(100, breakdown.goalAmount ? (totalRaised / breakdown.goalAmount) * 100 : 0);
+  return {
+    totalRaised,
+    deadline,
+    daysRemaining,
+    progress,
+    creatorPledgeAmount: breakdown.creatorPledgeAmount,
+    fundedAmountPublic: breakdown.fundedAmountPublic,
+    fundedAmountTotal: breakdown.fundedAmountTotal,
+    remainingAmount: breakdown.remainingAmount,
+    goalAmount: breakdown.goalAmount
+  };
 };
 
 export const addComment = (projectId: string, name: string, text: string) => {

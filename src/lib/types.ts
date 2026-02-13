@@ -83,6 +83,13 @@ export interface Project {
   creatorVideoLink?: string;
   verified?: boolean;
   goal: number;
+  goalAmount?: number;
+  creatorPledgeType?: "fixed" | "percent";
+  creatorPledgeValue?: number;
+  creatorPledgeAmount?: number;
+  fundedAmountPublic?: number;
+  fundedAmountTotal?: number;
+  remainingAmount?: number;
   createdAt: string;
   durationDays: number;
   fundingStatus: FundingStatus;

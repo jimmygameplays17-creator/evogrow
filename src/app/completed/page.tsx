@@ -6,7 +6,7 @@ export default function CompletedPage() {
       title="Proyectos finalizados"
       subtitle="Finalizados"
       completionFilter="completed"
-      infoText="Obras y campañas que ya concluyeron su meta o ejecución."
+      infoText="Obras y campañas que ya concluyeron su recaudación o ejecución."
     />
   );
 }

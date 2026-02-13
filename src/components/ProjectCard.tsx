@@ -10,9 +10,12 @@ export function ProjectCard({ project }: { project: Project }) {
   const metrics = computeProjectMetrics(project);
   const isOfficial = project.type === "official";
   const isCreator = project.type === "creator";
-  const username =
-    project.creatorHandle ??
-    `@${(project.ownerHandle ?? project.organizer).toLowerCase().replace(/\s+/g, "")}`;
+  const username = project.creatorHandle ?? `@${(project.ownerHandle ?? project.organizer).toLowerCase().replace(/\s+/g, "")}`;
+  const creatorPledgeLabel =
+    project.creatorPledgeType === "percent"
+      ? `Creador: ${project.creatorPledgeValue ?? 0}%`
+      : `Creador: ${new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(project.creatorPledgeAmount ?? 0)}`;
+  const communityLabel = `Comunidad: ${new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(project.fundedAmountPublic ?? metrics.totalRaised)}`;
 
   return (
     <div
@@ -49,12 +52,16 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.description}
         </p>
 
+        <div className="flex flex-wrap gap-1 text-[9px]">
+          <span className="rounded-full border border-money/30 bg-money/10 px-2 py-0.5 text-money">{creatorPledgeLabel}</span>
+          <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-slate-300">{communityLabel}</span>
+        </div>
+
         <ProgressBar value={metrics.progress} />
 
         <div className="mt-auto flex items-end justify-between gap-2">
           <div className="min-w-0 space-y-0.5 text-[10px] text-slate-400">
-            <p className="truncate text-money">Meta <Money amount={project.goal} /></p>
-            <p className="truncate text-money">Recaudado <Money amount={metrics.totalRaised} /></p>
+            <p className="truncate text-money">Recaudado <Money amount={metrics.fundedAmountTotal ?? metrics.totalRaised} /></p>
             <p className="truncate">{metrics.daysRemaining} días restantes</p>
           </div>
 

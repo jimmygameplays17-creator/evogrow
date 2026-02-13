@@ -19,14 +19,14 @@ export function HeaderNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-slate-200">
+    <nav className="flex flex-nowrap items-center gap-x-4 overflow-hidden whitespace-nowrap text-sm text-slate-200">
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         return (
           <Link
             key={item.href}
             href={item.href}
-            className={classNames("transition hover:text-accent", isActive && "text-white font-semibold")}
+            className={classNames("shrink-0 whitespace-nowrap transition hover:text-accent", isActive && "text-white font-semibold")}
           >
             {item.label}
           </Link>

@@ -1,10 +1,10 @@
 export interface AuthUser {
   userId: string;
   displayName: string;
-  authMethod: string;
+  authMethod: "google" | "email" | "wallet";
 }
 
-const STORAGE_KEY = "fundra_user";
+const STORAGE_KEY = "fundra_auth_user";
 
 export function getUser(): AuthUser | null {
   if (typeof window === "undefined") return null;
@@ -12,8 +12,7 @@ export function getUser(): AuthUser | null {
   if (!raw) return null;
   try {
     return JSON.parse(raw) as AuthUser;
-  } catch (error) {
-    console.error("Failed to parse auth user", error);
+  } catch {
     return null;
   }
 }
